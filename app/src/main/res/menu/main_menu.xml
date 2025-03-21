@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_home"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/menu_logout"
+        android:title="Log Out" />
+
+    <item
+        android:id="@+id/menu_camera"
+        android:title="Photo" />
+
+    <item
+        android:id="@+id/menu_timer"
+        android:title="Timer" />
+
+    <item
+        android:id="@+id/menu_userdetails"
+        android:title="User Details" />
+    <item
+        android:id="@+id/menu_ForgotPassword"
+        android:title="Forgot Password" />
+    <item
+        android:id="@+id/menu_ChatBot"
+        android:title="AI" />
+</menu>
