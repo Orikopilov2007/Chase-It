@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class ForgotPasswordActivity extends AppCompatActivity {
+public class ForgotPasswordActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditText etEmail;
     private Button btnResetPassword, btnBack;
@@ -31,10 +33,44 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forgot_password);
 
         findViews();
-        btnResetPassword.setOnClickListener(v -> resetPassword());
-        btnBack.setOnClickListener(v -> goToHomeActivity());  // Back button functionality
 
-        Toast.makeText(this, "Forgot Password Activity Loaded", Toast.LENGTH_SHORT).show();
+        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
+
+        View mainLayout = findViewById(R.id.main);
+        mainLayout.startAnimation(fadeIn);
+
+        btnResetPassword.startAnimation(slideIn);
+        btnBack.startAnimation(slideIn);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        Animation buttonPress = AnimationUtils.loadAnimation(this, R.anim.button_press);
+
+        buttonPress.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                // Not used, I have to use it because of the build of AnimationListener that needs it
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (view == btnResetPassword) {
+                    resetPassword();
+                } else if (view == btnBack) {
+                    startActivity(new Intent(ForgotPasswordActivity.this, MainActivity.class));
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                // Not used, I have to use it because of the build of AnimationListener that needs it
+            }
+        });
+
+        view.startAnimation(buttonPress);
     }
 
     /**
@@ -44,8 +80,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private void findViews() {
         etEmail = findViewById(R.id.etEmail);
         btnResetPassword = findViewById(R.id.btnResetPassword);
-        btnBack = findViewById(R.id.btnBack);  // Add back button
+        btnBack = findViewById(R.id.btnBack);
+
+        btnResetPassword.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
     }
+
 
     /**
      * Validates the email input, checks for empty or invalid email, and sends a password reset email.
@@ -64,8 +104,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        // Directly send a password reset email
-        sendPasswordResetEmail(email);  // No need to check for password fields
+        sendPasswordResetEmail(email);
     }
 
     /**
@@ -78,7 +117,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(ForgotPasswordActivity.this, "Password reset email sent!", Toast.LENGTH_SHORT).show();
-                    finish();  // Close activity after successful password reset email is sent
+                    finish();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(ForgotPasswordActivity.this, "Error sending reset email: " + e.getMessage(), Toast.LENGTH_SHORT).show();

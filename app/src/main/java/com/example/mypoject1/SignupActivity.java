@@ -6,6 +6,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,7 +29,7 @@ import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText etSignupEmail, etSignupPassword, etSignupFname, etSignupLname, etSignupPhone, etSignupYOB;
-    private Button btnSignup;
+    private Button btnSignup, btnBack;
     private FirebaseAuth fbAuth;
 
     @Override
@@ -43,6 +45,20 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         findViews();
         btnSignup.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
+
+        // Load animations from the res/anim folder
+        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
+
+
+        // Apply fade in animation to the entire layout (LinearLayout with id "main")
+        View mainLayout = findViewById(R.id.main);
+        mainLayout.startAnimation(fadeIn);
+
+        // Apply slide in animation to the buttons
+        btnSignup.startAnimation(slideIn);
+        btnBack.startAnimation(slideIn);
         fbAuth = FirebaseAuth.getInstance();
     }
 
@@ -54,56 +70,84 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         etSignupPhone = findViewById(R.id.etSignupPhone);
         etSignupYOB = findViewById(R.id.etSignupYOB);
         btnSignup = findViewById(R.id.btnSignup);
+        btnBack = findViewById(R.id.btnBack);
     }
+
 
     @Override
     public void onClick(View view) {
-        if (view == btnSignup) {
-            if (!validateFields()) return;
+        Animation buttonPress = AnimationUtils.loadAnimation(this, R.anim.button_press);
+        buttonPress.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                // Not used, I have to use it because of the build of AnimationListener that needs it
+            }
 
-            String email = sanitizeInput(etSignupEmail.getText().toString());
-            String pass = etSignupPassword.getText().toString();
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent intent = null;
+                if (view == btnSignup) {
+                    if (!validateFields()) return;
 
-            fbAuth.createUserWithEmailAndPassword(email, pass)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // User creation succeeded, proceed with Firestore
-                                String firstName = sanitizeInput(etSignupFname.getText().toString());
-                                String lastName = sanitizeInput(etSignupLname.getText().toString());
-                                String phone = sanitizeInput(etSignupPhone.getText().toString());
-                                int yob = Integer.parseInt(etSignupYOB.getText().toString());
+                    String email = sanitizeInput(etSignupEmail.getText().toString());
+                    String pass = etSignupPassword.getText().toString();
 
-                                MyUser user = new MyUser(firstName, lastName, phone, yob);
-                                FirebaseFirestore store = FirebaseFirestore.getInstance();
-                                store.collection("users").document(fbAuth.getUid()).set(user)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Toast.makeText(SignupActivity.this, "User created", Toast.LENGTH_LONG).show();
-                                                    // Inside the onComplete of Firebase user creation
-                                                    Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
-                                                    intent.putExtra("firstName", firstName); // Pass the first name to HomeActivity
-                                                    startActivity(intent);
-                                                } else {
-                                                    showFieldError(etSignupEmail, "Error: Unable to save user details");
-                                                }
-                                            }
-                                        });
-                            } else {
-                                // Handle errors during user creation
-                                String errorMessage = task.getException().getMessage();
-                                if (errorMessage != null && errorMessage.contains("email")) {
-                                    showFieldError(etSignupEmail, "Email already in use");
-                                } else {
-                                    showErrorToast("Error: " + errorMessage);
+                    fbAuth.createUserWithEmailAndPassword(email, pass)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // User creation succeeded, proceed with Firestore
+                                        String firstName = sanitizeInput(etSignupFname.getText().toString());
+                                        String lastName = sanitizeInput(etSignupLname.getText().toString());
+                                        String phone = sanitizeInput(etSignupPhone.getText().toString());
+                                        int yob = Integer.parseInt(etSignupYOB.getText().toString());
+
+                                        MyUser user = new MyUser(firstName, lastName, phone, yob);
+                                        FirebaseFirestore store = FirebaseFirestore.getInstance();
+                                        store.collection("users").document(fbAuth.getUid()).set(user)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Toast.makeText(SignupActivity.this, "User created", Toast.LENGTH_LONG).show();
+                                                            // Inside the onComplete of Firebase user creation
+                                                            Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
+                                                            intent.putExtra("firstName", firstName); // Pass the first name to HomeActivity
+                                                            startActivity(intent);
+                                                        } else {
+                                                            showFieldError(etSignupEmail, "Error: Unable to save user details");
+                                                        }
+                                                    }
+                                                });
+                                    } else {
+                                        // Handle errors during user creation
+                                        String errorMessage = task.getException().getMessage();
+                                        if (errorMessage != null && errorMessage.contains("email")) {
+                                            showFieldError(etSignupEmail, "Email already in use");
+                                        } else {
+                                            showErrorToast("Error: " + errorMessage);
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    });
-        }
+                            });
+
+                }else if (view == btnBack) {
+                    intent = new Intent(SignupActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+                startActivity(intent);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                // Not used, I have to use it because of the build of AnimationListener that needs it
+            }
+        });
+
+        view.startAnimation(buttonPress);
     }
 
     private boolean validateFields() {
@@ -176,13 +220,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
-    // Back button click method
-    public void onBackButtonClick(View view) {
-        Intent intent = new Intent(SignupActivity.this, MainActivity.class); // Go to the main activity
-        startActivity(intent);
-        finish(); // Optional, to close the current activity
-    }
-
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.before_login_menu, menu);
@@ -191,19 +228,22 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = null;
         if (item.getItemId() == R.id.menu_main) {
-            Intent intent = new Intent(this, MainActivity.class);
+            intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         } else if (item.getItemId() == R.id.menu_Login) {
-            Intent intent = new Intent(this, LoginActivity.class);
+            intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         } else if (item.getItemId() == R.id.menu_SignUp) {
-            Intent intent = new Intent(this, SignupActivity.class);
+            intent = new Intent(this, SignupActivity.class);
             startActivity(intent);
         } else if (item.getItemId() == R.id.menu_ForgotPassword) {
-            Intent intent = new Intent(this, com.example.mypoject1.ForgotPasswordActivity.class);
+            intent = new Intent(this, com.example.mypoject1.ForgotPasswordActivity.class);
             startActivity(intent);
         }
+
+        startActivity(intent);
 
         return super.onOptionsItemSelected(item);
     }

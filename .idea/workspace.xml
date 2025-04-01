@@ -5,12 +5,12 @@
       <config />
     </shared>
     <layouts>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_chatbot.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_camera.xml">
         <config>
           <theme>@style/Theme.MyPoject1</theme>
         </config>
       </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_dashboard.xml">
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_chatbot.xml">
         <config>
           <theme>@style/Theme.MyPoject1</theme>
         </config>
@@ -31,6 +31,11 @@
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+        <config>
+          <theme>@style/Theme.MyPoject1</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_photo_viewer.xml">
         <config>
           <theme>@style/Theme.MyPoject1</theme>
         </config>
@@ -56,21 +61,6 @@
         </config>
       </layout>
       <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_zoomable_image.xml">
-        <config>
-          <theme>@style/Theme.MyPoject1</theme>
-        </config>
-      </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml">
-        <config>
-          <theme>@style/Theme.MyPoject1</theme>
-        </config>
-      </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_timer.xml">
-        <config>
-          <theme>@style/Theme.MyPoject1</theme>
-        </config>
-      </layout>
-      <layout url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_user_details.xml">
         <config>
           <theme>@style/Theme.MyPoject1</theme>
         </config>
@@ -102,28 +92,65 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76820977-dcd5-4b26-bc39-d22aef98043d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/css/AI.css" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/css/AI.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/css/Change_password.css" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/css/Change_password.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/css/Login.css" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/css/Login.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/css/cutting_from_files.css" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/css/cutting_from_files.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/css/data_and_reports.css" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/css/data_and_reports.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/css/file_collision.css" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/css/file_collision.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/css/file_splitting.css" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/css/file_splitting.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/css/make_files.css" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/css/make_files.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/css/selectwize_boolean_query_styles_2.css" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/css/selectwize_boolean_query_styles_2.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/css/user_menu.css" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/css/user_menu.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/js/AI.js" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/js/AI.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/js/Change_password.js" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/js/Change_password.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/js/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/js/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/js/cutting_from_files.js" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/js/cutting_from_files.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/js/data_and_reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/js/data_and_reports.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/js/file_collision.js" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/js/file_collision.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/js/file_splitting.js" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/js/file_splitting.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/js/make_files.js" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/js/make_files.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/js/selectwize_boolean_query_script.js" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/js/selectwize_boolean_query_script.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/static/js/user_menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/static/js/user_menu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/selectwize_GUI/templates/AI.html" beforeDir="false" afterPath="$PROJECT_DIR$/selectwize_GUI/templates/AI.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/anim/button_press.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/anim/fade_in.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/anim/slide_in.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/anim/zoom_in.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibs$AndroidPluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibs$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibs$EspressoLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibs$ExtLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibs$FirebaseLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibs$GoogleGmsGooglePluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibs$GoogleGmsPluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibs$GooglePluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibs$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibs$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$AndroidPluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$BundleAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$EspressoLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$ExtLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$FirebaseLibraryAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$GoogleGmsGooglePluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$GoogleGmsPluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$GooglePluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$PluginAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock$VersionAccessors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/classes/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/metadata.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/sources/org/gradle/accessors/dm/LibrariesForLibs.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/dependencies-accessors/3f22fcd9d7039313b90d9b0fb5cb4176164eb89d/sources/org/gradle/accessors/dm/LibrariesForLibsInPluginsBlock.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.9/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/DashboardActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ForgotPasswordActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ForgotPasswordActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/HomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/HomeActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/HomeFragment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/LoginActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/SignupActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/SignupActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerFragment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/UserDetailsActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/UserDetailsActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/UserDetailsFragment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/image_frame.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_dashboard.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_forgot_password.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_forgot_password.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_timer.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_timer.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_user_details.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_user_details.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_timer.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_user_details.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,8 +210,8 @@
         <option value="Python Script" />
         <option value="valueResourceFile" />
         <option value="layoutResourceFile" />
-        <option value="Class" />
         <option value="resourceFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -206,24 +233,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Android App.app.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "com.google.services.firebase.aqiPopupShown": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/netal/PycharmProjects/selEctwiZe",
-    "settings.editor.selected.configurable": "AndroidSdkUpdater",
-    "two.files.diff.last.used.file": "C:/Ori/selEctwiZe - Last before Github/selectwize_GUI/templates/AI.html"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/netal/AndroidStudioProjects/Chase It/app/src/main/java/com/example/mypoject1/TimerActivity.java&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;AndroidSdkUpdater&quot;,
+    &quot;two.files.diff.last.used.file&quot;: &quot;C:/Users/netal/AndroidStudioProjects/Chase It/app/src/main/java/com/example/mypoject1/TimerActivity.java&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="com.example.mypoject1" />
+    </key>
+  </component>
   <component name="RunManager" selected="Android App.app">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="selEctwiZe" />
@@ -407,83 +439,13 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>190</line>
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>203</line>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>120</line>
-          <option name="timeStamp" value="50" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>275</line>
-          <option name="timeStamp" value="57" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>259</line>
-          <option name="timeStamp" value="58" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>379</line>
-          <option name="timeStamp" value="61" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>302</line>
-          <option name="timeStamp" value="62" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>176</line>
-          <option name="timeStamp" value="63" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>130</line>
-          <option name="timeStamp" value="64" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>98</line>
-          <option name="timeStamp" value="67" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>361</line>
-          <option name="timeStamp" value="68" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/UserDetailsActivity.java</url>
-          <line>212</line>
+          <line>248</line>
           <option name="timeStamp" value="93" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/CameraActivity.java</url>
-          <line>21</line>
-          <option name="timeStamp" value="98" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/CameraActivity.java</url>
-          <line>13</line>
-          <option name="timeStamp" value="101" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/UserDetailsActivity.java</url>
-          <line>106</line>
-          <option name="timeStamp" value="102" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/MainActivity.java</url>
-          <line>61</line>
+          <line>52</line>
           <option name="timeStamp" value="112" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">

@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -28,12 +31,13 @@ import java.util.regex.Pattern;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText etLoginEmail, etLoginPassword;
-    private Button btnLogin, btnForgotPassword;
+    private Button btnLogin, btnForgotPassword, btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -41,34 +45,73 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
 
         findViews();
+        // Load animations from res/anim folder
+        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
+
+        // Apply fade-in animation to the entire layout
+        View mainLayout = findViewById(R.id.main);
+        mainLayout.startAnimation(fadeIn);
+
+        // Apply slide-in animation to key interactive elements, e.g., buttons
+        btnLogin.startAnimation(slideIn);
+        btnForgotPassword.startAnimation(slideIn);
+        btnBack.startAnimation(slideIn);
+
+        // Set click listeners
         btnLogin.setOnClickListener(this);
-        btnForgotPassword.setOnClickListener(this); // Added listener for Forgot Password button
+        btnForgotPassword.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
 
-        Button btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> finish());
-
-        // Toast to verify that the page has loaded
-        Toast.makeText(this, "Login Activity Loaded", Toast.LENGTH_SHORT).show();
     }
 
     private void findViews() {
         etLoginEmail = findViewById(R.id.etLoginEmail);
         etLoginPassword = findViewById(R.id.etLoginPassword);
         btnLogin = findViewById(R.id.btnLogin);
-        btnForgotPassword = findViewById(R.id.btnForgotPassword); // Assign Forgot Password button
+        btnForgotPassword = findViewById(R.id.btnForgotPassword);
+        btnBack = findViewById(R.id.btnBack);
     }
 
     @Override
     public void onClick(View view) {
-        if (view == btnLogin) {
-            handleLogin();
-        } else if (view == btnForgotPassword) {
-            goToForgotPassword();
-        }
+        // Load the press animation
+        Animation buttonPress = AnimationUtils.loadAnimation(this, R.anim.button_press);
+
+        // Set an animation listener to perform actions after animation ends
+        buttonPress.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                // Not needed, required to implement AnimationListener
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent intent = null;
+                if (view == btnLogin) {
+                    handleLogin();
+                } else if (view == btnForgotPassword) {
+                    goToForgotPassword();
+                } else if (view == btnBack) {
+                    intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                // Not needed, required to implement AnimationListener
+            }
+        });
+
+        // Start the animation on the clicked button
+        view.startAnimation(buttonPress);
     }
 
+
     private void handleLogin() {
-        clearErrors(); // Clear previous errors
+        clearErrors();
 
         String email = sanitizeInput(etLoginEmail.getText().toString());
         String pass = etLoginPassword.getText().toString();
@@ -119,12 +162,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void goToForgotPassword() {
         Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
         startActivity(intent);
-        // Removed finish() here to ensure the LoginActivity is not closed prematurely
     }
 
     private boolean validateFields(String email, String pass) {
         boolean isValid = true;
-
         if (email.isEmpty()) {
             etLoginEmail.setError("Email is required");
             isValid = false;
@@ -132,7 +173,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             etLoginEmail.setError("Enter a valid email address");
             isValid = false;
         }
-
         if (pass.isEmpty()) {
             etLoginPassword.setError("Password is required");
             isValid = false;
@@ -140,7 +180,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             etLoginPassword.setError("Password must be at least 6 characters long, with an uppercase letter, lowercase letter, and a number");
             isValid = false;
         }
-
         return isValid;
     }
 
@@ -160,7 +199,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private String sanitizeInput(String input) {
-        return input.replaceAll("[<>\"'/]", ""); // Removes dangerous characters
+        return input.replaceAll("[<>\"'/]", "");
     }
 
     private boolean isValidEmail(String email) {
@@ -174,6 +213,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Pattern.compile(".*\\d.*").matcher(password).matches();
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.before_login_menu, menu);
@@ -183,19 +223,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_main) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, MainActivity.class));
         } else if (item.getItemId() == R.id.menu_Login) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, LoginActivity.class));
         } else if (item.getItemId() == R.id.menu_SignUp) {
-            Intent intent = new Intent(this, SignupActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, SignupActivity.class));
         } else if (item.getItemId() == R.id.menu_ForgotPassword) {
-            Intent intent = new Intent(this, com.example.mypoject1.ForgotPasswordActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, ForgotPasswordActivity.class));
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

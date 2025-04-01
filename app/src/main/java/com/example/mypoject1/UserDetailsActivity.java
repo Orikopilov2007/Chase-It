@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,12 +50,26 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         findViews();
         loadDetails();
 
+        // Load animations from res/anim folder
+        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
+
+        // Apply fade-in animation to the entire layout
+        View mainLayout = findViewById(R.id.main);
+        mainLayout.startAnimation(fadeIn);
+
         // Set click listeners for buttons and image view
         ivProfilePhoto.setOnClickListener(this);
         btnLogout.setOnClickListener(this);
         btnDeleteAccount.setOnClickListener(this);
         btnBack.setOnClickListener(this);
         btnForgotPassword.setOnClickListener(this); // Added listener for Forgot Password button
+
+        ivProfilePhoto.startAnimation(slideIn);
+        btnLogout.startAnimation(slideIn);
+        btnDeleteAccount.startAnimation(slideIn);
+        btnBack.startAnimation(slideIn);
+        btnForgotPassword.startAnimation(slideIn);
     }
 
     // Initialize the UI elements
@@ -96,42 +112,62 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     // Handle button click events
     @Override
     public void onClick(View view) {
-        if (view == ivProfilePhoto) {
-            showImageOptions(); // Show image options when profile photo is clicked
-        } else if (view == btnLogout) {
-            // Log out the user and redirect to MainActivity
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        } else if (view == btnDeleteAccount) {
-            // Show confirmation dialog for deleting account
-            new AlertDialog.Builder(this)
-                    .setTitle("Delete Account")
-                    .setMessage("Are you sure you want to delete your account? This action cannot be undone.")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        // Proceed with account deletion
-                        FirebaseAuth.getInstance().getCurrentUser().delete()
-                                .addOnSuccessListener(aVoid -> {
-                                    FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getUid()).delete()
-                                            .addOnSuccessListener(aVoid1 -> {
-                                                Toast.makeText(UserDetailsActivity.this, "Account deleted successfully", Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(this, MainActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            })
-                                            .addOnFailureListener(e -> Toast.makeText(UserDetailsActivity.this, "Failed to delete account", Toast.LENGTH_SHORT).show());
-                                })
-                                .addOnFailureListener(e -> Toast.makeText(UserDetailsActivity.this, "Failed to delete account", Toast.LENGTH_SHORT).show());
-                    })
-                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss()) // Dismiss the dialog if No is clicked
-                    .setCancelable(false) // Prevent dismissal by clicking outside
-                    .show();
-        } else if (view == btnBack) {
-            finish(); // Go back to previous activity
-        } else if (view == btnForgotPassword) {
-            goToForgotPassword(); // Navigate to Forgot Password activity
-        }
+        // Load the press animation
+        Animation buttonPress = AnimationUtils.loadAnimation(this, R.anim.button_press);
+        buttonPress.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                // Not needed, required to implement AnimationListener
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent intent = null;
+                if (view == ivProfilePhoto) {
+                    showImageOptions(); // Show image options when profile photo is clicked
+                } else if (view == btnLogout) {
+                    // Log out the user and redirect to MainActivity
+                    FirebaseAuth.getInstance().signOut();
+                     intent = new Intent(UserDetailsActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (view == btnDeleteAccount) {
+                    // Show confirmation dialog for deleting account
+                    new AlertDialog.Builder(UserDetailsActivity.this)
+                            .setTitle("Delete Account")
+                            .setMessage("Are you sure you want to delete your account? This action cannot be undone.")
+                            .setPositiveButton("Yes", (dialog, which) -> {
+                                // Proceed with account deletion
+                                FirebaseAuth.getInstance().getCurrentUser().delete()
+                                        .addOnSuccessListener(aVoid -> {
+                                            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getUid()).delete()
+                                                    .addOnSuccessListener(aVoid1 -> {
+                                                        Toast.makeText(UserDetailsActivity.this, "Account deleted successfully", Toast.LENGTH_SHORT).show();
+                                                        startActivity(new Intent(UserDetailsActivity.this, MainActivity.class));
+                                                        finish();
+
+                                                    })
+                                                    .addOnFailureListener(e -> Toast.makeText(UserDetailsActivity.this, "Failed to delete account", Toast.LENGTH_SHORT).show());
+                                        })
+                                        .addOnFailureListener(e -> Toast.makeText(UserDetailsActivity.this, "Failed to delete account", Toast.LENGTH_SHORT).show());
+                            })
+                            .setNegativeButton("No", (dialog, which) -> dialog.dismiss()) // Dismiss the dialog if No is clicked
+                            .setCancelable(false) // Prevent dismissal by clicking outside
+                            .show();
+                } else if (view == btnBack) {
+                    finish();
+                } else if (view == btnForgotPassword) {
+                    goToForgotPassword(); // Navigate to Forgot Password activity
+                }
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                // Not needed, required to implement AnimationListener
+            }
+        });
+
+        view.startAnimation(buttonPress);
     }
 
     // Show options for viewing or changing profile photo
