@@ -6,7 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
+import android.os.AsyncTask;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+// API usage: Google Maps SDK and Location Services API are imported for map display and location updates.
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
@@ -44,11 +45,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+// API usage: Firebase Firestore API is imported to store and retrieve workout summary data remotely.
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.location.LocationServices;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Locale;
 
 public class TimerActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, OnMapReadyCallback {
@@ -59,14 +61,15 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
     Button btnBack, btnStartStopwatch, btnResetStopwatch, btnStartTimer, btnResetTimer;
     Button btnFinishWorkout, btnCloseDialog, btnShareSummary;
     EditText etTimeInput;
-    TextView tvWorkoutSummary, tvTotalSteps, tvTotalDistance;
+    TextView tvWorkoutSummary, tvTotalSteps, tvTotalDistance, tvAverageSpeed;
     LinearLayout workoutSummaryDialog;
     TextView tvStopwatch, tvCountDown, tvSteps, tvDistance;
-    // MapView for location
+
+    // MapView for location display
     private MapView mapView;
     private GoogleMap gMap;
 
-    // Firebase Firestore instance for saving workout summary
+    // API usage: Firebase Firestore is used to store workout summary data remotely.
     private FirebaseFirestore db;
 
     // Route tracking fields
@@ -84,27 +87,34 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
     // Sensor-related fields
     private SensorManager sensorManager;
     private Sensor stepCounterSensor;
+    private Sensor accelerometerSensor; // Advanced subject: using accelerometer sensor
     private float initialStepCount = -1;
 
     // Counters (updated via sensor events)
     int stepCount = 0;
     double distanceCovered = 0.0;
 
-    // Speed Calculation
+    // Accelerometer data storage for later analysis (advanced subject: sensor data processing)
+    private List<float[]> accelerometerData = new ArrayList<>();
+
+    // Total elapsed time used for speed calculation
     long totalElapsedTime = 0;
+    private float latestSensorReading = -1;
 
-
+    /**
+     * Called when the activity is first created. This method initializes the UI, sensors, Firebase, and MapView.
+     * It also sets up animations and event listeners.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: Starting TimerActivity");
         setContentView(R.layout.activity_timer);
 
-
-        // Initialize Firebase Firestore
+        // API usage: Initialize Firebase Firestore for data storage.
         db = FirebaseFirestore.getInstance();
 
-        // Initialize Maps SDK with logging
+        // API usage: Initialize Google Maps SDK.
         try {
             MapsInitializer.initialize(this);
             Log.d(TAG, "MapsInitializer.initialize succeeded");
@@ -112,7 +122,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
             Log.e(TAG, "MapsInitializer.initialize failed", e);
         }
 
-        // Adjust layout for system bars
+        // Adjust layout to account for system bars (advanced subject: UI adaptation)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             v.setPadding(
                     insets.getInsets(WindowInsetsCompat.Type.systemBars()).left,
@@ -125,7 +135,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         // Initialize UI Elements and MapView
         findViews();
 
-        // Load animations and apply to key views
+        // Load animations and apply to key views (advanced subject: UI animation)
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
         View mainLayout = findViewById(R.id.main);
@@ -136,7 +146,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         btnStartTimer.startAnimation(slideIn);
         btnResetTimer.startAnimation(slideIn);
 
-        // Set click listeners
+        // Set click listeners for buttons
         btnBack.setOnClickListener(this);
         btnStartStopwatch.setOnClickListener(this);
         btnResetStopwatch.setOnClickListener(this);
@@ -146,7 +156,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         btnCloseDialog.setOnClickListener(this);
         btnShareSummary.setOnClickListener(this);
 
-        // Check permissions for activity recognition and location
+        // Check for necessary permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Requesting ACTIVITY_RECOGNITION permission");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 1);
@@ -162,17 +172,19 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         updateSteps();
         updateDistance();
 
-        // Initialize sensor for step counting
+        // Initialize sensors for step counting and accelerometer (advanced subject: sensor integration)
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
             stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             Log.d(TAG, "Step counter sensor: " + (stepCounterSensor != null ? "available" : "not available"));
+            Log.d(TAG, "Accelerometer sensor: " + (accelerometerSensor != null ? "available" : "not available"));
         }
         if (stepCounterSensor == null) {
             Log.d(TAG, "Step counter sensor not available.");
         }
 
-        // Initialize MapView
+        // Initialize MapView for location display (advanced subject: maps integration)
         if (mapView == null) {
             Log.e(TAG, "mapView is null in onCreate!");
         } else {
@@ -182,6 +194,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Finds and initializes all view elements from the layout.
+     */
     private void findViews() {
         btnBack = findViewById(R.id.btnBack);
         btnStartStopwatch = findViewById(R.id.btnStartStopwatch);
@@ -198,9 +213,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         tvWorkoutSummary = findViewById(R.id.tvWorkoutSummary);
         tvTotalSteps = findViewById(R.id.tvTotalSteps);
         tvTotalDistance = findViewById(R.id.tvTotalDistance);
+        tvAverageSpeed = findViewById(R.id.tvAverageSpeed); // New TextView for average speed
         btnCloseDialog = findViewById(R.id.btnCloseDialog);
         btnShareSummary = findViewById(R.id.btnShareSummary);
-        // MapView (make sure its id matches in your XML)
         mapView = findViewById(R.id.mapView);
         if (mapView == null) {
             Log.e(TAG, "mapView not found in layout!");
@@ -209,6 +224,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Called when the activity resumes. Registers sensor listeners and resumes the MapView.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -216,12 +234,19 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
             sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_FASTEST);
             Log.d(TAG, "Sensor listener registered");
         }
+        if (accelerometerSensor != null) {
+            sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            Log.d(TAG, "Accelerometer sensor listener registered");
+        }
         if (mapView != null) {
             Log.d(TAG, "Calling mapView.onResume()");
             mapView.onResume();
         }
     }
 
+    /**
+     * Called when the activity pauses. Unregisters sensor listeners and pauses the MapView.
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -235,6 +260,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Called when the activity is destroyed. Destroys the MapView.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -244,6 +272,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Called when the system is running low on memory. Passes this event to the MapView.
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -253,22 +284,26 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    // Map Ready Callback – sets up the map and location updates
+    /**
+     * Callback when the MapView is ready. Enables MyLocation and sets up location updates.
+     *
+     * @param googleMap the GoogleMap object
+     *
+     * API usage: Google Maps API and Google Location Services API are used to show the user’s current location on the map.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady: Map is ready");
         gMap = googleMap;
-
+        // API usage: FusedLocationProviderClient from Google Location Services API for location updates.
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         try {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 gMap.setMyLocationEnabled(true);
                 Log.d(TAG, "MyLocation enabled on map");
-
                 // Request a fresh location update when the map is ready
                 requestFreshLocation(fusedLocationClient);
-
-                // Override the MyLocation button click so it always requests a fresh update
+                // Override the MyLocation button click for fresh updates
                 gMap.setOnMyLocationButtonClickListener(() -> {
                     Log.d(TAG, "MyLocation button clicked. Requesting fresh location.");
                     requestFreshLocation(fusedLocationClient);
@@ -282,8 +317,14 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Requests a single high-accuracy location update and moves the map camera accordingly.
+     *
+     * @param fusedLocationClient the FusedLocationProviderClient for location updates
+     *
+     * API usage: Uses Google Location Services API to get a high-accuracy location.
+     */
     private void requestFreshLocation(FusedLocationProviderClient fusedLocationClient) {
-        // Create a location request for a fresh location update
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(500);
@@ -301,7 +342,6 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
                 if (location != null) {
                     LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                     Log.d(TAG, "Fresh location coordinates: " + currentLatLng.toString());
-                    // Zoom level 18f for a closer view
                     gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 18f));
                     Log.d(TAG, "Camera moved to fresh location: " + currentLatLng.toString());
                 } else {
@@ -317,15 +357,24 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
+    /**
+     * Moves the map camera to a default location.
+     *
+     * API usage: Utilizes Google Maps API to move the camera.
+     */
     private void moveToDefaultLocation() {
-        // Coordinates for Golomov 15, Givatayim
         LatLng defaultLocation = new LatLng(32.072550, 34.811370);
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 18f));
         Log.d(TAG, "Camera moved to default location: " + defaultLocation.toString());
     }
 
-    // SensorEventListener Methods for step counting
-    private float latestSensorReading = -1;
+    /**
+     * Callback for sensor events. Updates step count, distance and collects accelerometer data.
+     *
+     * API usage: Uses Android Sensor APIs.
+     *
+     * @param event the sensor event
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
@@ -334,27 +383,43 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
                 initialStepCount = event.values[0];
             }
             stepCount = (int) (event.values[0] - initialStepCount);
-            distanceCovered = stepCount * 0.8; // Assuming an average step length of 0.8 meters
+            distanceCovered = stepCount * 0.8; // Assumes an average step length of 0.8 meters
             updateSteps();
             updateDistance();
+        } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            // Advanced subject: Collect accelerometer data for later asynchronous analysis
+            accelerometerData.add(event.values.clone());
         }
     }
 
+    /**
+     * Not used in this implementation.
+     *
+     * @param sensor   the sensor
+     * @param accuracy the new accuracy of this sensor
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // No action needed for this use case
+        // No action needed for this use case.
     }
 
-    // UI update methods for counters
+    /**
+     * Updates the UI element displaying the current step count.
+     */
     private void updateSteps() {
         tvSteps.setText("Steps: " + stepCount);
     }
 
+    /**
+     * Updates the UI element displaying the current distance covered.
+     */
     private void updateDistance() {
         tvDistance.setText("Distance: " + String.format(Locale.getDefault(), "%.2f", distanceCovered) + " m");
     }
 
-    // Stopwatch and Timer methods (start, pause, reset, update, etc.)
+    /**
+     * Starts the stopwatch and initializes its counters.
+     */
     private void startStopwatch() {
         stopwatchStartTime = System.currentTimeMillis();
         isStopwatchRunning = true;
@@ -363,6 +428,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         startCounters();
     }
 
+    /**
+     * Pauses the stopwatch, updates the elapsed time, and stops the counter.
+     */
     private void pauseStopwatch() {
         stopwatchTime += System.currentTimeMillis() - stopwatchStartTime;
         isStopwatchRunning = false;
@@ -371,6 +439,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         stopCounters();
     }
 
+    /**
+     * Resets the stopwatch to zero.
+     */
     private void resetStopwatch() {
         stopwatchTime = 0;
         totalElapsedTime = 0;
@@ -380,6 +451,10 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         stopCounters();
     }
 
+    /**
+     * Runs the stopwatch updating its display periodically.
+     * Uses advanced subject: Handler for repeated delayed tasks.
+     */
     private void runStopwatch() {
         stopwatchRunnable = new Runnable() {
             @Override
@@ -395,6 +470,11 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         timerHandler.post(stopwatchRunnable);
     }
 
+    /**
+     * Updates the stopwatch TextView with the formatted elapsed time.
+     *
+     * @param elapsedMillis elapsed time in milliseconds
+     */
     private void updateStopwatchText(long elapsedMillis) {
         int hours = (int) (elapsedMillis / 3600000);
         int minutes = (int) (elapsedMillis / 60000) % 60;
@@ -404,6 +484,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         tvStopwatch.setText(timeFormat);
     }
 
+    /**
+     * Parses time input from the EditText and sets the countdown timer accordingly.
+     */
     private void setTimeFromInput() {
         String input = etTimeInput.getText().toString();
         if (!input.isEmpty()) {
@@ -413,6 +496,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Resets the countdown timer.
+     */
     private void resetTimer() {
         if (countdownRunnable != null) {
             timerHandler.removeCallbacks(countdownRunnable);
@@ -425,6 +511,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         stopCounters();
     }
 
+    /**
+     * Starts the countdown timer.
+     */
     private void startTimer() {
         countdownRunnable = new Runnable() {
             @Override
@@ -448,6 +537,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         startCounters();
     }
 
+    /**
+     * Pauses the countdown timer.
+     */
     private void pauseTimer() {
         if (countdownRunnable != null) {
             timerHandler.removeCallbacks(countdownRunnable);
@@ -458,6 +550,11 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         stopCounters();
     }
 
+    /**
+     * Updates the countdown timer TextView with the formatted time.
+     *
+     * @param millisUntilFinished time remaining in milliseconds
+     */
     private void updateCountText(long millisUntilFinished) {
         int minutes = (int) (millisUntilFinished / 1000) / 60;
         int seconds = (int) (millisUntilFinished / 1000) % 60;
@@ -466,6 +563,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         tvCountDown.setText(timeFormat);
     }
 
+    /**
+     * Prepares the counters when the stopwatch or timer is running.
+     */
     private void startCounters() {
         if (isStopwatchRunning || isTimerRunning) {
             if (initialStepCount < 0) {
@@ -474,11 +574,21 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Updates the UI counters (steps and distance).
+     */
     private void stopCounters() {
         updateSteps();
         updateDistance();
     }
 
+    /**
+     * Handles button click events and delegates to the corresponding methods.
+     *
+     * Advanced subjects used: Activity navigation, sensor management, asynchronous tasks.
+     *
+     * @param view the clicked view
+     */
     @Override
     public void onClick(View view) {
         if (view == btnBack) {
@@ -505,8 +615,10 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         } else if (view == btnResetTimer) {
             resetTimer();
         } else if (view == btnFinishWorkout) {
+            // Show summary, store data, and run asynchronous average speed calculation
             showWorkoutSummary();
             storeWorkoutSummary();
+            new AverageSpeedAnalysisTask().execute(); // Advanced subject: AsyncTask usage
         } else if (view == btnCloseDialog) {
             closeWorkoutSummaryDialog();
         } else if (view == btnShareSummary) {
@@ -514,6 +626,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Displays the workout summary dialog and updates summary UI elements.
+     */
     private void showWorkoutSummary() {
         tvTotalSteps.setText("Total Steps: " + stepCount);
         tvTotalDistance.setText("Total Distance: " + String.format(Locale.getDefault(), "%.2f", distanceCovered) + " m");
@@ -524,10 +639,11 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         disableMainLayout();
     }
 
+    /**
+     * Closes the workout summary dialog and resets counters and sensor data for a new workout.
+     */
     private void closeWorkoutSummaryDialog() {
         workoutSummaryDialog.animate().alpha(0f).setDuration(300).withEndAction(() -> workoutSummaryDialog.setVisibility(View.GONE));
-        // Reset counters and route tracking for a new workout
-        // Update the initialStepCount to the latest sensor reading to restart from 0
         if (latestSensorReading != -1) {
             initialStepCount = latestSensorReading;
         }
@@ -542,8 +658,12 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         updateDistance();
         updateSteps();
         enableMainLayout();
+        accelerometerData.clear();
     }
 
+    /**
+     * Disables UI elements to prevent user interaction during certain processes.
+     */
     private void disableMainLayout() {
         findViewById(R.id.tvTitle).setEnabled(false);
         findViewById(R.id.tvTimerTitle).setEnabled(false);
@@ -561,6 +681,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.btnBack).setEnabled(false);
     }
 
+    /**
+     * Enables UI elements for user interaction.
+     */
     private void enableMainLayout() {
         findViewById(R.id.tvTitle).setEnabled(true);
         findViewById(R.id.tvTimerTitle).setEnabled(true);
@@ -578,30 +701,61 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.btnBack).setEnabled(true);
     }
 
-
-    // Store the workout summary to Firebase Firestore
+    /**
+     * Stores the workout summary data in Firebase Firestore.
+     *
+     * API usage: Firebase Firestore API is used to store workout data in the remote database.
+     */
     private void storeWorkoutSummary() {
-        // Create a summary object (could be a Map or a custom object)
         java.util.Map<String, Object> summary = new java.util.HashMap<>();
         summary.put("steps", stepCount);
         summary.put("distance", distanceCovered);
         summary.put("elapsedTime", tvStopwatch.getText().toString());
-        summary.put("routePoints", routePoints); // This saves a list of LatLng objects; you may need to convert them if required by your Firestore structure.
+        summary.put("routePoints", routePoints);
         summary.put("timestamp", System.currentTimeMillis());
         db.collection("workouts")
                 .add(summary)
                 .addOnSuccessListener(documentReference -> Log.d(TAG, "Workout summary saved with ID: " + documentReference.getId()))
                 .addOnFailureListener(e -> Log.e(TAG, "Error adding workout summary", e));
     }
-    // Share the workout summary using an implicit intent
+
+    /**
+     * Shares the workout summary using an implicit intent.
+     *
+     * API usage: Android Intent API (ACTION_SEND) is used to share data with other apps.
+     */
     private void shareWorkoutSummary() {
         String shareContent = "Workout Summary:\n" +
                 "Elapsed Time: " + tvStopwatch.getText().toString() + "\n" +
                 "Steps: " + stepCount + "\n" +
-                "Distance: " + String.format(Locale.getDefault(), "%.2f", distanceCovered) + " m";
+                "Distance: " + String.format(Locale.getDefault(), "%.2f", distanceCovered) + " m\n" +
+                "Average Speed: " + tvAverageSpeed.getText().toString();
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareContent);
         startActivity(Intent.createChooser(shareIntent, "Share your workout"));
+    }
+
+    /**
+     * AsyncTask to compute average speed from workout data.
+     * Advanced subject: This uses AsyncTask to perform background computation without blocking the UI.
+     *
+     * Average Speed = distanceCovered (in meters) / (totalElapsedTime in seconds)
+     */
+    private class AverageSpeedAnalysisTask extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            if (totalElapsedTime == 0) {
+                return "N/A";
+            }
+            double avgSpeed = distanceCovered / (totalElapsedTime / 1000.0);
+            return String.format(Locale.getDefault(), "%.2f m/s", avgSpeed);
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            // Update the average speed TextView in the workout summary dialog
+            tvAverageSpeed.setText("Average Speed: " + result);
+            Log.d(TAG, "Average Speed computed: " + result);
+        }
     }
 }

@@ -8,54 +8,47 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mypoject1.databinding.ActivityHomeBinding;
+
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
-    Button btnHomeUserDetails, btnCamera, btnTimer, btnLogout;
-    TextView welcomeTextView;
+
+    private ActivityHomeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        findViews();
+        // Using view binding to inflate the layout
+        binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        // Get the first name from the Intent
-        Intent intent = getIntent();
-        String firstName = intent.getStringExtra("firstName");
+        // Retrieve firstName from the Intent and set welcome message
+        String firstName = getIntent().getStringExtra("firstName");
         if (firstName == null) {
             firstName = "User";
         }
-        welcomeTextView.setText("Welcome " + firstName + "!");
+        binding.welcomeTextView.setText("Welcome " + firstName + "!");
 
-        // Start animations
-        View mainLayout = findViewById(R.id.main);
+        // Start animations for a more dynamic UI
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-        mainLayout.startAnimation(fadeIn);
+        binding.main.startAnimation(fadeIn);
+
         Animation zoomIn = AnimationUtils.loadAnimation(this, R.anim.zoom_in);
-        welcomeTextView.startAnimation(zoomIn);
+        binding.welcomeTextView.startAnimation(zoomIn);
+
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
-        btnHomeUserDetails.startAnimation(slideIn);
-        btnCamera.startAnimation(slideIn);
-        btnTimer.startAnimation(slideIn);
-        btnLogout.startAnimation(slideIn);
+        binding.btnHomeUserDetails.startAnimation(slideIn);
+        binding.btnCamera.startAnimation(slideIn);
+        binding.btnTimer.startAnimation(slideIn);
+        binding.btnLogout.startAnimation(slideIn);
 
-        // Set click listeners
-        btnHomeUserDetails.setOnClickListener(this);
-        btnCamera.setOnClickListener(this);
-        btnTimer.setOnClickListener(this);
-        btnLogout.setOnClickListener(this);
-    }
-
-    private void findViews() {
-        btnHomeUserDetails = findViewById(R.id.btnHomeUserDetails);
-        btnCamera = findViewById(R.id.btnCamera);
-        btnTimer = findViewById(R.id.btnTimer);
-        btnLogout = findViewById(R.id.btnLogout);
-        welcomeTextView = findViewById(R.id.welcomeTextView);
+        // Set click listeners using view binding
+        binding.btnHomeUserDetails.setOnClickListener(this);
+        binding.btnCamera.setOnClickListener(this);
+        binding.btnTimer.setOnClickListener(this);
+        binding.btnLogout.setOnClickListener(this);
     }
 
     @Override
@@ -69,13 +62,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onAnimationEnd(Animation animation) {
                 Intent intent = null;
-                if (view == btnHomeUserDetails) {
+                if (view == binding.btnHomeUserDetails) {
                     intent = new Intent(HomeActivity.this, UserDetailsActivity.class);
-                } else if (view == btnCamera) {
+                } else if (view == binding.btnCamera) {
                     intent = new Intent(HomeActivity.this, CameraActivity.class);
-                } else if (view == btnTimer) {
+                } else if (view == binding.btnTimer) {
                     intent = new Intent(HomeActivity.this, TimerActivity.class);
-                } else if (view == btnLogout) {
+                } else if (view == binding.btnLogout) {
                     intent = new Intent(HomeActivity.this, MainActivity.class);
                     finish();
                 }
@@ -97,18 +90,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = null;
-        if (item.getItemId() == R.id.menu_home) {
+        int id = item.getItemId();
+        if (id == R.id.menu_home) {
             intent = new Intent(this, HomeActivity.class);
-        } else if (item.getItemId() == R.id.menu_logout) {
+        } else if (id == R.id.menu_logout) {
             intent = new Intent(this, MainActivity.class);
             finish();
-        } else if (item.getItemId() == R.id.menu_camera) {
+        } else if (id == R.id.menu_camera) {
             intent = new Intent(this, CameraActivity.class);
-        } else if (item.getItemId() == R.id.menu_timer) {
+        } else if (id == R.id.menu_timer) {
             intent = new Intent(this, TimerActivity.class);
-        } else if (item.getItemId() == R.id.menu_userdetails) {
+        } else if (id == R.id.menu_userdetails) {
             intent = new Intent(this, UserDetailsActivity.class);
-        } else if (item.getItemId() == R.id.menu_ForgotPassword) {
+        } else if (id == R.id.menu_ForgotPassword) {
             intent = new Intent(this, ForgotPasswordActivity.class);
         }
         startActivity(intent);

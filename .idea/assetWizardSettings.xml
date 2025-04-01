@@ -14,8 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="camera_svgrepo_com" />
-                            <entry key="sourceFile" value="C:\Users\netal\AndroidStudioProjects\Chase It\icons\camera-svgrepo-com.svg" />
+                            <entry key="outputName" value="ic_snooze" />
+                            <entry key="sourceFile" value="C:\Users\netal\Downloads\ic_snooze.svg" />
                           </map>
                         </option>
                       </PersistentState>

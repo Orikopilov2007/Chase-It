@@ -191,6 +191,32 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="-3dp"/>
 
+    <!-- Accelerometer Data Display -->
+    <TextView
+        android:id="@+id/tvAcceleration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Acceleration: 0 m/s²"
+        android:textSize="18sp"
+        android:textColor="@color/text_primary"
+        app:layout_constraintTop_toBottomOf="@id/btnResetStopwatch"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="45dp"
+        android:layout_marginStart="0dp" />
+
+    <!-- ProgressBar for Async Analysis -->
+    <ProgressBar
+        android:id="@+id/progressAnalysis"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminate="true"
+        app:layout_constraintTop_toBottomOf="@id/tvAcceleration"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"/>
+
     <!-- MapView: Displays your current location -->
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
@@ -256,7 +282,17 @@
             android:text="Total Distance: 0.0 m"
             android:textSize="18sp"
             android:textColor="@color/black"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="8dp"/>
+
+        <!-- New Average Speed TextView -->
+        <TextView
+            android:id="@+id/tvAverageSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Average Speed: N/A"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="8dp"/>
 
         <!-- Share Workout Summary Button -->
         <Button
@@ -285,5 +321,6 @@
             android:layout_gravity="center_horizontal"
             android:contentDescription="Close Dialog"/>
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
