@@ -11,6 +11,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -32,7 +33,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationRequest;
@@ -42,7 +42,13 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.android.gms.location.LocationServices;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Locale;
 
 public class TimerActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, OnMapReadyCallback {
@@ -51,11 +57,21 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
 
     // UI Elements
     Button btnBack, btnStartStopwatch, btnResetStopwatch, btnStartTimer, btnResetTimer;
+    Button btnFinishWorkout, btnCloseDialog, btnShareSummary;
     EditText etTimeInput;
+    TextView tvWorkoutSummary, tvTotalSteps, tvTotalDistance;
+    LinearLayout workoutSummaryDialog;
     TextView tvStopwatch, tvCountDown, tvSteps, tvDistance;
     // MapView for location
     private MapView mapView;
     private GoogleMap gMap;
+
+    // Firebase Firestore instance for saving workout summary
+    private FirebaseFirestore db;
+
+    // Route tracking fields
+    private List<LatLng> routePoints = new ArrayList<>();
+    private Polyline routePolyline;
 
     // Stopwatch and Timer Variables
     boolean isStopwatchRunning = false;
@@ -77,16 +93,16 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
     // Speed Calculation
     long totalElapsedTime = 0;
 
-    private Button btnFinishWorkout;
-    private LinearLayout workoutSummaryDialog;
-    private TextView tvWorkoutSummary, tvTotalSteps, tvTotalDistance;
-    private Button btnCloseDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: Starting TimerActivity");
         setContentView(R.layout.activity_timer);
+
+
+        // Initialize Firebase Firestore
+        db = FirebaseFirestore.getInstance();
 
         // Initialize Maps SDK with logging
         try {
@@ -128,6 +144,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         btnResetTimer.setOnClickListener(this);
         btnFinishWorkout.setOnClickListener(this);
         btnCloseDialog.setOnClickListener(this);
+        btnShareSummary.setOnClickListener(this);
 
         // Check permissions for activity recognition and location
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
@@ -182,6 +199,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         tvTotalSteps = findViewById(R.id.tvTotalSteps);
         tvTotalDistance = findViewById(R.id.tvTotalDistance);
         btnCloseDialog = findViewById(R.id.btnCloseDialog);
+        btnShareSummary = findViewById(R.id.btnShareSummary);
         // MapView (make sure its id matches in your XML)
         mapView = findViewById(R.id.mapView);
         if (mapView == null) {
@@ -195,7 +213,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
         if (stepCounterSensor != null) {
-            sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_FASTEST);
             Log.d(TAG, "Sensor listener registered");
         }
         if (mapView != null) {
@@ -268,7 +286,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         // Create a location request for a fresh location update
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(1000); // 1 second interval
+        locationRequest.setInterval(500);
         locationRequest.setNumUpdates(1);  // Only one update is needed
 
         LocationCallback locationCallback = new LocationCallback() {
@@ -307,9 +325,11 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
     }
 
     // SensorEventListener Methods for step counting
+    private float latestSensorReading = -1;
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+            latestSensorReading = event.values[0];
             if (initialStepCount == -1) {
                 initialStepCount = event.values[0];
             }
@@ -486,14 +506,18 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
             resetTimer();
         } else if (view == btnFinishWorkout) {
             showWorkoutSummary();
+            storeWorkoutSummary();
         } else if (view == btnCloseDialog) {
             closeWorkoutSummaryDialog();
+        } else if (view == btnShareSummary) {
+            shareWorkoutSummary();
         }
     }
 
     private void showWorkoutSummary() {
         tvTotalSteps.setText("Total Steps: " + stepCount);
         tvTotalDistance.setText("Total Distance: " + String.format(Locale.getDefault(), "%.2f", distanceCovered) + " m");
+        tvWorkoutSummary.setText("Elapsed Time: " + tvStopwatch.getText().toString());
         workoutSummaryDialog.setVisibility(View.VISIBLE);
         workoutSummaryDialog.setAlpha(0f);
         workoutSummaryDialog.animate().alpha(1f).setDuration(300);
@@ -502,8 +526,17 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
 
     private void closeWorkoutSummaryDialog() {
         workoutSummaryDialog.animate().alpha(0f).setDuration(300).withEndAction(() -> workoutSummaryDialog.setVisibility(View.GONE));
+        // Reset counters and route tracking for a new workout
+        // Update the initialStepCount to the latest sensor reading to restart from 0
+        if (latestSensorReading != -1) {
+            initialStepCount = latestSensorReading;
+        }
         stepCount = 0;
         distanceCovered = 0.0;
+        routePoints.clear();
+        if (routePolyline != null) {
+            routePolyline.remove();
+        }
         tvTotalSteps.setText("Total Steps: 0");
         tvTotalDistance.setText("Total Distance: 0.0 m");
         updateDistance();
@@ -543,5 +576,32 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.tvSteps).setEnabled(true);
         findViewById(R.id.tvDistance).setEnabled(true);
         findViewById(R.id.btnBack).setEnabled(true);
+    }
+
+
+    // Store the workout summary to Firebase Firestore
+    private void storeWorkoutSummary() {
+        // Create a summary object (could be a Map or a custom object)
+        java.util.Map<String, Object> summary = new java.util.HashMap<>();
+        summary.put("steps", stepCount);
+        summary.put("distance", distanceCovered);
+        summary.put("elapsedTime", tvStopwatch.getText().toString());
+        summary.put("routePoints", routePoints); // This saves a list of LatLng objects; you may need to convert them if required by your Firestore structure.
+        summary.put("timestamp", System.currentTimeMillis());
+        db.collection("workouts")
+                .add(summary)
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "Workout summary saved with ID: " + documentReference.getId()))
+                .addOnFailureListener(e -> Log.e(TAG, "Error adding workout summary", e));
+    }
+    // Share the workout summary using an implicit intent
+    private void shareWorkoutSummary() {
+        String shareContent = "Workout Summary:\n" +
+                "Elapsed Time: " + tvStopwatch.getText().toString() + "\n" +
+                "Steps: " + stepCount + "\n" +
+                "Distance: " + String.format(Locale.getDefault(), "%.2f", distanceCovered) + " m";
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareContent);
+        startActivity(Intent.createChooser(shareIntent, "Share your workout"));
     }
 }

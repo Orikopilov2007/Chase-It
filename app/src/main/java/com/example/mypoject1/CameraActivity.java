@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -38,6 +39,13 @@ public class CameraActivity extends Activity {
         values.put(MediaStore.Images.Media.TITLE, "New Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION, "From Camera");
         imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        ImageButton btnBackCamera = findViewById(R.id.btnBack);
+        btnBackCamera.setOnClickListener(v -> {
+            setResult(RESULT_CANCELED);
+            finish(); // Close the activity on back button press
+        });
+
 
         if (imageUri != null) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

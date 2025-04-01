@@ -1,15 +1,18 @@
 package com.example.mypoject1;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,6 +33,7 @@ import java.util.regex.Pattern;
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText etSignupEmail, etSignupPassword, etSignupFname, etSignupLname, etSignupPhone, etSignupYOB;
     private Button btnSignup, btnBack;
+    private ProgressBar progressBar;
     private FirebaseAuth fbAuth;
 
     @Override
@@ -51,14 +55,14 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
 
-
-        // Apply fade in animation to the entire layout (LinearLayout with id "main")
+        // Apply fade in animation to the entire layout
         View mainLayout = findViewById(R.id.main);
         mainLayout.startAnimation(fadeIn);
 
         // Apply slide in animation to the buttons
         btnSignup.startAnimation(slideIn);
         btnBack.startAnimation(slideIn);
+
         fbAuth = FirebaseAuth.getInstance();
     }
 
@@ -71,83 +75,77 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         etSignupYOB = findViewById(R.id.etSignupYOB);
         btnSignup = findViewById(R.id.btnSignup);
         btnBack = findViewById(R.id.btnBack);
+        progressBar = findViewById(R.id.progressBar);
     }
-
 
     @Override
     public void onClick(View view) {
+        // Dismiss keyboard on button click
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null && view != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
         Animation buttonPress = AnimationUtils.loadAnimation(this, R.anim.button_press);
-        buttonPress.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                // Not used, I have to use it because of the build of AnimationListener that needs it
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Intent intent = null;
-                if (view == btnSignup) {
-                    if (!validateFields()) return;
-
-                    String email = sanitizeInput(etSignupEmail.getText().toString());
-                    String pass = etSignupPassword.getText().toString();
-
-                    fbAuth.createUserWithEmailAndPassword(email, pass)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        // User creation succeeded, proceed with Firestore
-                                        String firstName = sanitizeInput(etSignupFname.getText().toString());
-                                        String lastName = sanitizeInput(etSignupLname.getText().toString());
-                                        String phone = sanitizeInput(etSignupPhone.getText().toString());
-                                        int yob = Integer.parseInt(etSignupYOB.getText().toString());
-
-                                        MyUser user = new MyUser(firstName, lastName, phone, yob);
-                                        FirebaseFirestore store = FirebaseFirestore.getInstance();
-                                        store.collection("users").document(fbAuth.getUid()).set(user)
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            Toast.makeText(SignupActivity.this, "User created", Toast.LENGTH_LONG).show();
-                                                            // Inside the onComplete of Firebase user creation
-                                                            Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
-                                                            intent.putExtra("firstName", firstName); // Pass the first name to HomeActivity
-                                                            startActivity(intent);
-                                                        } else {
-                                                            showFieldError(etSignupEmail, "Error: Unable to save user details");
-                                                        }
-                                                    }
-                                                });
-                                    } else {
-                                        // Handle errors during user creation
-                                        String errorMessage = task.getException().getMessage();
-                                        if (errorMessage != null && errorMessage.contains("email")) {
-                                            showFieldError(etSignupEmail, "Email already in use");
-                                        } else {
-                                            showErrorToast("Error: " + errorMessage);
-                                        }
-                                    }
-                                }
-                            });
-
-                }else if (view == btnBack) {
-                    intent = new Intent(SignupActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-                startActivity(intent);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                // Not used, I have to use it because of the build of AnimationListener that needs it
-            }
-        });
-
         view.startAnimation(buttonPress);
+
+        if (view == btnSignup) {
+            if (!validateFields()) return;
+
+            // Show progress indicator
+            progressBar.setVisibility(View.VISIBLE);
+
+            String email = sanitizeInput(etSignupEmail.getText().toString());
+            String pass = etSignupPassword.getText().toString();
+
+            fbAuth.createUserWithEmailAndPassword(email, pass)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            // Hide progress indicator once operation is complete
+                            progressBar.setVisibility(View.GONE);
+                            if (task.isSuccessful()) {
+                                // Send verification email
+                                fbAuth.getCurrentUser().sendEmailVerification();
+
+                                String firstName = sanitizeInput(etSignupFname.getText().toString());
+                                String lastName = sanitizeInput(etSignupLname.getText().toString());
+                                String phone = sanitizeInput(etSignupPhone.getText().toString());
+                                int yob = Integer.parseInt(etSignupYOB.getText().toString());
+
+                                MyUser user = new MyUser(firstName, lastName, phone, yob);
+                                FirebaseFirestore store = FirebaseFirestore.getInstance();
+                                store.collection("users").document(fbAuth.getUid()).set(user)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(SignupActivity.this, "User created. Please verify your email.", Toast.LENGTH_LONG).show();
+                                                    // Navigate to HomeActivity, passing the first name for personalization
+                                                    Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
+                                                    intent.putExtra("firstName", firstName);
+                                                    startActivity(intent);
+                                                } else {
+                                                    showFieldError(etSignupEmail, "Error: Unable to save user details");
+                                                }
+                                            }
+                                        });
+                            } else {
+                                String errorMessage = task.getException().getMessage();
+                                if (errorMessage != null && errorMessage.contains("email")) {
+                                    showFieldError(etSignupEmail, "Email already in use");
+                                } else {
+                                    showErrorToast("Error: " + errorMessage);
+                                }
+                            }
+                        }
+                    });
+
+        } else if (view == btnBack) {
+            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private boolean validateFields() {
@@ -191,35 +189,34 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private boolean isValidPhone(String phone) {
-        // Modify regex for more accurate phone number matching (example: US number format)
         return Pattern.compile("^(\\+\\d{1,2}\\s?)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$").matcher(phone).matches();
     }
 
     private boolean isValidPassword(String password) {
-        // Password must contain at least one lowercase letter, one uppercase letter, one number, and be at least 6 characters
         return password.length() >= 6 &&
-                Pattern.compile(".*[a-z].*").matcher(password).matches() && // Contains lowercase
-                Pattern.compile(".*[A-Z].*").matcher(password).matches() && // Contains uppercase
-                Pattern.compile(".*\\d.*").matcher(password).matches();   // Contains digit
+                Pattern.compile(".*[a-z].*").matcher(password).matches() &&
+                Pattern.compile(".*[A-Z].*").matcher(password).matches() &&
+                Pattern.compile(".*\\d.*").matcher(password).matches();
     }
 
     private boolean isValidYOB(String yob) {
         try {
             int year = Integer.parseInt(yob);
-            return year > 1900 && year <= 2025; // Adjust as per requirement
+            return year > 1900 && year <= 2025;
         } catch (NumberFormatException e) {
             return false;
         }
     }
 
     private String sanitizeInput(String input) {
-        return input.replaceAll("[<>\"'/]", ""); // Removes dangerous characters
+        return input.replaceAll("[<>\"'/]", "");
     }
 
     private void showErrorToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.before_login_menu, menu);
@@ -231,20 +228,16 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         Intent intent = null;
         if (item.getItemId() == R.id.menu_main) {
             intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
         } else if (item.getItemId() == R.id.menu_Login) {
             intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
         } else if (item.getItemId() == R.id.menu_SignUp) {
             intent = new Intent(this, SignupActivity.class);
-            startActivity(intent);
         } else if (item.getItemId() == R.id.menu_ForgotPassword) {
             intent = new Intent(this, com.example.mypoject1.ForgotPasswordActivity.class);
+        }
+        if(intent != null) {
             startActivity(intent);
         }
-
-        startActivity(intent);
-
         return super.onOptionsItemSelected(item);
     }
 }

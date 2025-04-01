@@ -2,15 +2,16 @@ package com.example.mypoject1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,14 +31,17 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "LoginActivity";
     private EditText etLoginEmail, etLoginPassword;
     private Button btnLogin, btnForgotPassword, btnBack;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Set system window insets for layout padding
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -53,16 +57,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         View mainLayout = findViewById(R.id.main);
         mainLayout.startAnimation(fadeIn);
 
-        // Apply slide-in animation to key interactive elements, e.g., buttons
-        btnLogin.startAnimation(slideIn);
-        btnForgotPassword.startAnimation(slideIn);
-        btnBack.startAnimation(slideIn);
+        // Apply slide-in animation to key interactive elements
+        animateView(btnLogin, slideIn);
+        animateView(btnForgotPassword, slideIn);
+        animateView(btnBack, slideIn);
 
         // Set click listeners
         btnLogin.setOnClickListener(this);
         btnForgotPassword.setOnClickListener(this);
         btnBack.setOnClickListener(this);
-
     }
 
     private void findViews() {
@@ -71,97 +74,109 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnLogin = findViewById(R.id.btnLogin);
         btnForgotPassword = findViewById(R.id.btnForgotPassword);
         btnBack = findViewById(R.id.btnBack);
+        progressBar = findViewById(R.id.progressBar);
+    }
+
+    // Helper method to apply animation to a view
+    private void animateView(View view, Animation animation) {
+        view.startAnimation(animation);
     }
 
     @Override
     public void onClick(View view) {
-        // Load the press animation
+        // Load the button press animation
         Animation buttonPress = AnimationUtils.loadAnimation(this, R.anim.button_press);
-
-        // Set an animation listener to perform actions after animation ends
         buttonPress.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                // Not needed, required to implement AnimationListener
+                // Not needed
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Intent intent = null;
                 if (view == btnLogin) {
                     handleLogin();
                 } else if (view == btnForgotPassword) {
                     goToForgotPassword();
                 } else if (view == btnBack) {
-                    intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 }
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                // Not needed, required to implement AnimationListener
+                // Not needed
             }
         });
-
-        // Start the animation on the clicked button
         view.startAnimation(buttonPress);
     }
 
-
     private void handleLogin() {
         clearErrors();
+        progressBar.setVisibility(View.VISIBLE); // Show progress indicator
 
         String email = sanitizeInput(etLoginEmail.getText().toString());
         String pass = etLoginPassword.getText().toString();
 
-        if (!validateFields(email, pass)) return;
+        if (!validateFields(email, pass)) {
+            progressBar.setVisibility(View.GONE);
+            return;
+        }
 
         FirebaseAuth fbAuth = FirebaseAuth.getInstance();
         fbAuth.signInWithEmailAndPassword(email, pass)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+                        Log.d(TAG, "Login successful");
                         Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-
-                        String userId = FirebaseAuth.getInstance().getUid();
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        db.collection("users").document(userId).get()
-                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        if (documentSnapshot.exists()) {
-                                            String firstName = documentSnapshot.getString("firstName");
-                                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                            intent.putExtra("firstName", firstName);
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            Toast.makeText(LoginActivity.this, "User details not found", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(LoginActivity.this, "Error fetching user details", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                        fetchUserDetails();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Login failed: " + e.getMessage());
                         Toast.makeText(LoginActivity.this, "Login Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         handleAuthenticationFailure(e.getMessage());
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    // Separate method to fetch user details after successful authentication
+    private void fetchUserDetails() {
+        String userId = FirebaseAuth.getInstance().getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        progressBar.setVisibility(View.GONE);
+                        if (documentSnapshot.exists()) {
+                            String firstName = documentSnapshot.getString("firstName");
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            intent.putExtra("firstName", firstName);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "User details not found", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(LoginActivity.this, "Error fetching user details", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Error fetching user details: " + e.getMessage());
                     }
                 });
     }
 
     private void goToForgotPassword() {
-        Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
     }
 
     private boolean validateFields(String email, String pass) {
@@ -184,9 +199,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void handleAuthenticationFailure(String errorMessage) {
-        if (errorMessage.contains("password")) {
+        if (errorMessage.toLowerCase().contains("password")) {
             etLoginPassword.setError("Incorrect password");
-        } else if (errorMessage.contains("no user")) {
+        } else if (errorMessage.toLowerCase().contains("no user")) {
             etLoginEmail.setError("No account found with this email");
         } else {
             etLoginEmail.setError("Invalid email or password");

@@ -67,6 +67,9 @@ dependencies {
     implementation ("androidx.navigation:navigation-fragment-ktx:2.6.0") // or the latest version
     implementation ("androidx.navigation:navigation-ui-ktx:2.6.0") // or the latest version
     implementation("org.json:json:20210307")
+    implementation ("com.github.yalantis:ucrop:2.2.8")
+    implementation ("com.github.bumptech.glide:glide:4.13.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.13.0")
 
 
 

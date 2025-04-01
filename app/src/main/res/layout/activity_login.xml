@@ -13,8 +13,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_primary"
         android:text="Login"
+        android:textColor="@color/text_primary"
         android:textStyle="bold"
         android:textSize="24sp"
         android:layout_marginBottom="16dp" />
@@ -34,10 +34,8 @@
             android:inputType="textEmailAddress"
             android:hint="Your email"
             android:textColor="@color/background_color"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp" />
+            android:padding="16dp"
+            android:contentDescription="Email Input Field" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Password Input -->
@@ -55,7 +53,8 @@
             android:inputType="textPassword"
             android:hint="Your password"
             android:textColor="@color/background_color"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:contentDescription="Password Input Field" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Forgot Password Button -->
@@ -70,8 +69,7 @@
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp"
         android:layout_gravity="center_horizontal"
-        android:visibility="visible"/>
-
+        android:contentDescription="Forgot Password Button" />
 
     <!-- Login Button -->
     <Button
@@ -84,7 +82,8 @@
         android:textStyle="bold"
         android:padding="12dp"
         android:layout_marginBottom="8dp"
-        android:elevation="4dp" />
+        android:elevation="4dp"
+        android:contentDescription="Login Button" />
 
     <!-- Back Button -->
     <Button
@@ -97,6 +96,16 @@
         android:textStyle="bold"
         android:padding="12dp"
         android:layout_marginTop="16dp"
-        android:elevation="4dp" />
+        android:elevation="4dp"
+        android:contentDescription="Back Button" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"
+        android:contentDescription="Loading Indicator"/>
 
 </LinearLayout>

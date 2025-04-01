@@ -43,6 +43,17 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+        <activity
+            android:name=".ZoomableImageActivity"
+            android:exported="false" />
+
+
+
         <receiver android:name=".NotificationReceiver" android:exported="true"/>
 
         <meta-data

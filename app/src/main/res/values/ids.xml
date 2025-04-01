@@ -5,4 +5,6 @@
     <item name="btnTimer" type="id" />
     <item name="btnLogout" type="id" />
     <item name="ivCapturedPhoto" type="id" />
+    <item name="splash_logo" type="id" />
+    <item name="progress_bar" type="id" />
 </resources>
