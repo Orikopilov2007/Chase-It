@@ -1,0 +1,14 @@
+[
+  {
+    "prompt": "What is a good pre-run meal?",
+    "completion": "A good pre-run meal should include easily digestible carbohydrates for energy, such as oatmeal, bananas, or toast with peanut butter."
+  },
+  {
+    "prompt": "What should I eat after a run?",
+    "completion": "After a run, eat a balanced meal that includes protein for muscle recovery and carbohydrates to replenish glycogen stores, such as a chicken salad or a smoothie."
+  },
+  {
+    "prompt": "How much should I eat before running?",
+    "completion": "You should aim to eat a light meal 30-60 minutes before running, focusing on carbohydrates with a small amount of protein."
+  }
+]

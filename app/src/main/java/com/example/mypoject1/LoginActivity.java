@@ -156,6 +156,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         progressBar.setVisibility(View.GONE);
                         if (documentSnapshot.exists()) {
                             String firstName = documentSnapshot.getString("firstName");
+
+                            getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+                                    .edit()
+                                    .putString("firstName", firstName)
+                                    .apply();
+
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             intent.putExtra("firstName", firstName);
                             startActivity(intent);

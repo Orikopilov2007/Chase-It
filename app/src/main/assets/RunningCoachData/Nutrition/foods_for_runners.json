@@ -1,0 +1,14 @@
+[
+  {
+    "prompt": "What are the best foods for runners?",
+    "completion": "The best foods for runners include bananas for potassium, oats for sustained energy, and salmon for omega-3 fatty acids and protein."
+  },
+  {
+    "prompt": "How does oatmeal help runners?",
+    "completion": "Oatmeal provides complex carbohydrates that release energy slowly, making it a great option for breakfast before a long run."
+  },
+  {
+    "prompt": "Why is salmon good for runners?",
+    "completion": "Salmon is rich in omega-3 fatty acids, which reduce inflammation, and protein, which aids in muscle recovery after a run."
+  }
+]

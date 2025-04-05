@@ -121,6 +121,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
                                                     Toast.makeText(SignupActivity.this, "User created. Please verify your email.", Toast.LENGTH_LONG).show();
+
+                                                    getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+                                                            .edit()
+                                                            .putString("firstName", firstName)
+                                                            .apply();
+
                                                     // Navigate to HomeActivity, passing the first name for personalization
                                                     Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
                                                     intent.putExtra("firstName", firstName);

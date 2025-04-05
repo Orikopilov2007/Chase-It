@@ -155,20 +155,34 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                             .setTitle("Delete Account")
                             .setMessage("Are you sure you want to delete your account? This action cannot be undone.")
                             .setPositiveButton("Yes", (dialog, which) -> {
+                                String uid = FirebaseAuth.getInstance().getUid();  // Store UID before deletion
+                                if(uid == null) {
+                                    // Handle the case where UID is null (user not logged in)
+                                    return;
+                                }
+
                                 FirebaseAuth.getInstance().getCurrentUser().delete()
                                         .addOnSuccessListener(aVoid -> {
+                                            // Delete the user document from Firestore using the stored uid
                                             FirebaseFirestore.getInstance().collection("users")
-                                                    .document(FirebaseAuth.getInstance().getUid()).delete()
+                                                    .document(uid)
+                                                    .delete()
                                                     .addOnSuccessListener(aVoid1 -> {
+                                                        // Clear SharedPreferences and navigate back
+                                                        getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+                                                                .edit()
+                                                                .clear()
+                                                                .apply();
                                                         Toast.makeText(UserDetailsActivity.this, "Account deleted successfully", Toast.LENGTH_SHORT).show();
                                                         startActivity(new Intent(UserDetailsActivity.this, MainActivity.class));
                                                         finish();
                                                     })
                                                     .addOnFailureListener(e ->
-                                                            Toast.makeText(UserDetailsActivity.this, "Failed to delete account", Toast.LENGTH_SHORT).show());
+                                                            Toast.makeText(UserDetailsActivity.this, "Failed to delete account data from DB: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                                         })
                                         .addOnFailureListener(e ->
-                                                Toast.makeText(UserDetailsActivity.this, "Failed to delete account", Toast.LENGTH_SHORT).show());
+                                                Toast.makeText(UserDetailsActivity.this, "Failed to delete account: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
                             })
                             .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                             .setCancelable(false)

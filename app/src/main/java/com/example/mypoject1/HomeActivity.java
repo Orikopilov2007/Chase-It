@@ -1,6 +1,7 @@
 package com.example.mypoject1;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,10 +26,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(binding.getRoot());
 
         // Retrieve firstName from the Intent and set welcome message
-        String firstName = getIntent().getStringExtra("firstName");
-        if (firstName == null) {
-            firstName = "User";
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String firstName = prefs.getString("firstName", null);
+
+        // If no user information is found, redirect to MainActivity
+        if (firstName == null || firstName.isEmpty()) {
+            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            return;
         }
+
         binding.welcomeTextView.setText("Welcome " + firstName + "!");
 
         // Start animations for a more dynamic UI
@@ -40,13 +48,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
         binding.btnHomeUserDetails.startAnimation(slideIn);
-        binding.btnCamera.startAnimation(slideIn);
+        binding.btnAI.startAnimation(slideIn);
         binding.btnTimer.startAnimation(slideIn);
         binding.btnLogout.startAnimation(slideIn);
 
         // Set click listeners using view binding
         binding.btnHomeUserDetails.setOnClickListener(this);
-        binding.btnCamera.setOnClickListener(this);
+        binding.btnAI.setOnClickListener(this);
         binding.btnTimer.setOnClickListener(this);
         binding.btnLogout.setOnClickListener(this);
     }
@@ -64,8 +72,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = null;
                 if (view == binding.btnHomeUserDetails) {
                     intent = new Intent(HomeActivity.this, UserDetailsActivity.class);
-                } else if (view == binding.btnCamera) {
-                    intent = new Intent(HomeActivity.this, CameraActivity.class);
+                } else if (view == binding.btnAI) {
+                    intent = new Intent(HomeActivity.this, ChatbotActivity.class);
                 } else if (view == binding.btnTimer) {
                     intent = new Intent(HomeActivity.this, TimerActivity.class);
                 } else if (view == binding.btnLogout) {

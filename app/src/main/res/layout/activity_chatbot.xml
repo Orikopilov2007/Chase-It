@@ -9,21 +9,31 @@
     android:background="@drawable/gradient_background"
     tools:context=".ChatbotActivity">
 
-    <!-- Back Button at top left -->
+    <!-- Top Bar with Back Button, Avatar, and Centered Header -->
     <ImageButton
         android:id="@+id/backButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_arrow_down"
-        android:text="Back"
+        android:src="@drawable/ic_arrow_back"
+        android:contentDescription="Back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="16dp"
-        app:tint="@android:color/white" />
+        app:tint="@android:color/white"
+        android:onClick="handleButtonClick" />
 
+    <!-- Optional Avatar (user profile pic) -->
+    <ImageView
+        android:id="@+id/avatarImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:contentDescription="User Avatar" />
 
-    <!-- Header -->
+    <!-- Centered Header -->
     <TextView
         android:id="@+id/chatbotHeader"
         android:layout_width="wrap_content"
@@ -32,11 +42,23 @@
         android:textStyle="bold"
         android:textSize="30sp"
         android:textColor="@color/text_primary"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/backButton"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"/>
+        android:layout_marginTop="16dp" />
+
+    <!-- Sub-header Welcome Message -->
+    <TextView
+        android:id="@+id/subHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome! Ask me anything about running."
+        android:textColor="@color/text_primary"
+        app:layout_constraintTop_toBottomOf="@id/chatbotHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
 
     <!-- RecyclerView for chat messages -->
     <androidx.recyclerview.widget.RecyclerView
@@ -46,41 +68,78 @@
         android:clipToPadding="false"
         android:padding="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/chatbotHeader"
-        app:layout_constraintBottom_toTopOf="@+id/messageInputContainer"
+        app:layout_constraintTop_toBottomOf="@id/subHeader"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Input container: Material TextInputLayout with a TextInputEditText -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/messageInputContainer"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <!-- Bottom Bar: Horizontal chain for Attach, Input, and Send -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Enter your message..."
-        app:startIconDrawable="@drawable/ic_attach_file"
+        android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sendMessageFab"
-        android:layout_margin="16dp">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/userInput"
-            android:layout_width="match_parent"
+        <!-- Attach File Button -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/attachFileFab"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:contentDescription="Attach File"
+            app:srcCompat="@drawable/ic_attach_file"
+            android:onClick="handleButtonClick"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- FloatingActionButton for sending message -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/sendMessageFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Send message"
-        app:srcCompat="@drawable/ic_arrow_up"
-        app:layout_constraintBottom_toBottomOf="parent"
+        <!-- Message Input Container -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/messageInputContainer"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Enter your message..."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/attachFileFab"
+            app:layout_constraintEnd_toStartOf="@id/sendMessageFab"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/userInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Send Message Button -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/sendMessageFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="Send message"
+            app:srcCompat="@drawable/ic_arrow_up"
+            android:onClick="handleButtonClick"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Decorative Image -->
+    <ImageView
+        android:id="@+id/decorativeImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_chat_decor"
+        app:layout_constraintTop_toBottomOf="@id/subHeader"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp" />
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:alpha="0.5" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
