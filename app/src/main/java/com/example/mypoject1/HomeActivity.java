@@ -104,6 +104,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             intent = new Intent(this, UserDetailsActivity.class);
         } else if (id == R.id.menu_ForgotPassword) {
             intent = new Intent(this, ForgotPasswordActivity.class);
+        } else if(id == R.id.menu_ChatBot){
+            intent = new Intent(this, ChatbotActivity.class);
         }
         startActivity(intent);
         return super.onOptionsItemSelected(item);

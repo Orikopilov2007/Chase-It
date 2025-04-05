@@ -61,4 +61,6 @@
     <!-- Special Use Colors -->
     <color name="highlight_background">#FFEB3B</color>
     <color name="button_text">#FFFFFF</color>
+    <color name="grey">#B0B0B0</color>
+
 </resources>

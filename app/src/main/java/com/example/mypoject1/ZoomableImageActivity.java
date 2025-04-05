@@ -1,6 +1,8 @@
 package com.example.mypoject1;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
@@ -30,5 +32,28 @@ public class ZoomableImageActivity extends AppCompatActivity {
                     .load(imageUri)
                     .into(photoView);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = null;
+        if (item.getItemId() == R.id.menu_home) {
+            intent = new Intent(this, HomeActivity.class);
+        } else if (item.getItemId() == R.id.menu_logout) {
+            intent = new Intent(this, MainActivity.class);
+            finish();
+        } else if (item.getItemId() == R.id.menu_camera) {
+            intent = new Intent(this, CameraActivity.class);
+        } else if (item.getItemId() == R.id.menu_timer) {
+            intent = new Intent(this, TimerActivity.class);
+        } else if (item.getItemId() == R.id.menu_userdetails) {
+            intent = new Intent(this, UserDetailsActivity.class);
+        } else if (item.getItemId() == R.id.menu_ForgotPassword) {
+            intent = new Intent(this, ForgotPasswordActivity.class);
+        } else if(item.getItemId() == R.id.menu_ChatBot){
+            intent = new Intent(this, ChatbotActivity.class);
+        }
+        startActivity(intent);
+        return super.onOptionsItemSelected(item);
     }
 }

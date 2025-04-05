@@ -326,8 +326,6 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-
-
     // תהליך חיתוך באמצעות UCrop
     private void startCrop(Uri sourceUri) {
         Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "cropped_" + UUID.randomUUID().toString() + ".jpg"));
@@ -402,27 +400,24 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
+        Intent intent = null;
         if (item.getItemId() == R.id.menu_home) {
             intent = new Intent(this, HomeActivity.class);
-            startActivity(intent);
         } else if (item.getItemId() == R.id.menu_logout) {
             intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
             finish();
         } else if (item.getItemId() == R.id.menu_camera) {
             intent = new Intent(this, CameraActivity.class);
-            startActivity(intent);
         } else if (item.getItemId() == R.id.menu_timer) {
             intent = new Intent(this, TimerActivity.class);
-            startActivity(intent);
         } else if (item.getItemId() == R.id.menu_userdetails) {
             intent = new Intent(this, UserDetailsActivity.class);
-            startActivity(intent);
         } else if (item.getItemId() == R.id.menu_ForgotPassword) {
             intent = new Intent(this, ForgotPasswordActivity.class);
-            startActivity(intent);
+        } else if(item.getItemId() == R.id.menu_ChatBot){
+            intent = new Intent(this, ChatbotActivity.class);
         }
+        startActivity(intent);
         return super.onOptionsItemSelected(item);
     }
 

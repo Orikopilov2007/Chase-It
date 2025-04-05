@@ -21,7 +21,6 @@ public class SplashActivity extends AppCompatActivity {
         ImageView splashLogo = findViewById(R.id.splash_logo);
         ProgressBar progressBar = findViewById(R.id.progress_bar);
 
-        //Animations
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         splashLogo.startAnimation(fadeIn);
 

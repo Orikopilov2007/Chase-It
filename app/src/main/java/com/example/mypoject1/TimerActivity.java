@@ -758,4 +758,34 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
             Log.d(TAG, "Average Speed computed: " + result);
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = null;
+        if (item.getItemId() == R.id.menu_home) {
+            intent = new Intent(this, HomeActivity.class);
+        } else if (item.getItemId() == R.id.menu_logout) {
+            intent = new Intent(this, MainActivity.class);
+            finish();
+        } else if (item.getItemId() == R.id.menu_camera) {
+            intent = new Intent(this, CameraActivity.class);
+        } else if (item.getItemId() == R.id.menu_timer) {
+            intent = new Intent(this, TimerActivity.class);
+        } else if (item.getItemId() == R.id.menu_userdetails) {
+            intent = new Intent(this, UserDetailsActivity.class);
+        } else if (item.getItemId() == R.id.menu_ForgotPassword) {
+            intent = new Intent(this, ForgotPasswordActivity.class);
+        } else if(item.getItemId() == R.id.menu_ChatBot){
+            intent = new Intent(this, ChatbotActivity.class);
+        }
+        startActivity(intent);
+        return super.onOptionsItemSelected(item);
+    }
 }
