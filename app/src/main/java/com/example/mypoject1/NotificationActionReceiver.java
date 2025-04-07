@@ -5,13 +5,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+/**
+ * NotificationActionReceiver handles actions from notification buttons (like "Snooze").
+ * Triggered when the user interacts with notification action buttons.
+ */
 public class NotificationActionReceiver extends BroadcastReceiver {
+
+    /**
+     * Called when the BroadcastReceiver receives an Intent broadcast.
+     *
+     * @param context The Context in which the receiver is running.
+     * @param intent  The Intent being received.
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
+        // Check if the intent action matches "SNOOZE_ACTION"
         if ("SNOOZE_ACTION".equals(intent.getAction())) {
-            // Example: Reschedule notification after a 10-minute snooze
+            // Notify user with a Toast message
             Toast.makeText(context, "Notification snoozed for 10 minutes", Toast.LENGTH_SHORT).show();
-            // Implement your snooze rescheduling logic here
+
+            // TODO: Implement logic to reschedule the notification after 10 minutes
+            // This could include setting an AlarmManager or WorkManager task
         }
     }
 }

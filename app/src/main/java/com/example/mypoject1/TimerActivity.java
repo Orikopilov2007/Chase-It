@@ -328,7 +328,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(500);
-        locationRequest.setNumUpdates(1);  // Only one update is needed
+        locationRequest.setNumUpdates(1);
 
         LocationCallback locationCallback = new LocationCallback() {
             @Override
@@ -383,7 +383,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
                 initialStepCount = event.values[0];
             }
             stepCount = (int) (event.values[0] - initialStepCount);
-            distanceCovered = stepCount * 0.8; // Assumes an average step length of 0.8 meters
+            distanceCovered = stepCount * 0.8;
             updateSteps();
             updateDistance();
         } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -774,8 +774,6 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         } else if (item.getItemId() == R.id.menu_logout) {
             intent = new Intent(this, MainActivity.class);
             finish();
-        } else if (item.getItemId() == R.id.menu_camera) {
-            intent = new Intent(this, CameraActivity.class);
         } else if (item.getItemId() == R.id.menu_timer) {
             intent = new Intent(this, TimerActivity.class);
         } else if (item.getItemId() == R.id.menu_userdetails) {

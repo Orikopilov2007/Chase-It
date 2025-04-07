@@ -13,43 +13,55 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.OutputStream;
-
+/**
+ * CameraActivity handles capturing a photo using the device camera.
+ * It manages camera permissions, photo capture, and passing back the captured image URI.
+ */
 public class CameraActivity extends Activity {
 
     private static final int CAMERA_REQUEST_CODE = 200;
     private Uri imageUri;
     private ImageView ivCapturedPhoto;
 
+    /**
+     * Called when the activity is starting.
+     * Sets up the camera capture process and checks for camera permissions.
+     *
+     * @param savedInstanceState Bundle with saved state, if any.
+     */
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        // Check for camera permission; request if not granted.
         if (checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{android.Manifest.permission.CAMERA}, 100);
         }
 
-
+        // Initialize the ImageView for displaying the captured photo.
         ivCapturedPhoto = findViewById(R.id.ivCapturedPhoto);
 
-        // Prepare to capture the photo
+        // Prepare a ContentValues object to store image metadata.
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "New Picture");
         values.put(MediaStore.Images.Media.DESCRIPTION, "From Camera");
+
+        // Insert into MediaStore to get a URI for the captured image.
         imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
+        // Set up the back button to cancel and exit the activity.
         ImageButton btnBackCamera = findViewById(R.id.btnBack);
         btnBackCamera.setOnClickListener(v -> {
             setResult(RESULT_CANCELED);
             finish(); // Close the activity on back button press
         });
 
-
+        // Start the camera intent if a valid URI is obtained.
         if (imageUri != null) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); // Save photo to the URI
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); // Save photo to the provided URI
             startActivityForResult(intent, CAMERA_REQUEST_CODE);
         } else {
             Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
@@ -57,27 +69,37 @@ public class CameraActivity extends Activity {
         }
     }
 
+    /**
+     * Receives the result from the camera capture intent.
+     * Displays the captured photo and returns the photo URI to the calling activity.
+     *
+     * @param requestCode The request code originally supplied to startActivityForResult().
+     * @param resultCode  The result code returned by the child activity.
+     * @param data        An Intent containing any additional data.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             try {
-                // Display the captured photo in the ImageView
+                // Retrieve the captured photo from the given URI and display it.
                 Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                 ivCapturedPhoto.setImageBitmap(photo);
 
-                // Pass the photo URI back to the calling activity
+                // Create an intent to pass the photo URI back to the calling activity.
                 Intent resultIntent = new Intent();
                 resultIntent.setData(imageUri); // Set the photo URI
                 setResult(RESULT_OK, resultIntent);
             } catch (Exception e) {
-                //Toast.makeText(this, "Failed to save photo", Toast.LENGTH_SHORT).show();
+                // If an error occurs, set result as canceled.
                 setResult(RESULT_CANCELED);
             }
         } else {
+            // Handle the case where photo capture was canceled.
             Toast.makeText(this, "Photo capture canceled", Toast.LENGTH_SHORT).show();
             setResult(RESULT_CANCELED);
         }
-        finish(); // Close CameraActivity
+        // Close the activity after handling the result.
+        finish();
     }
 }

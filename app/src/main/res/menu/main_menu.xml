@@ -9,9 +9,6 @@
         android:id="@+id/menu_logout"
         android:title="Log Out" />
 
-    <item
-        android:id="@+id/menu_camera"
-        android:title="Photo" />
 
     <item
         android:id="@+id/menu_timer"

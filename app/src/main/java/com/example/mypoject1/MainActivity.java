@@ -16,56 +16,70 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.Manifest;
 
+/**
+ * MainActivity is the launcher activity for the app .
+ * It checks and requests necessary permissions, starts background services,
+ * applies animations, and navigates to the Login and Signup screens.
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    Button btnMainSignUp, btnMainLogIn;
+
+    // UI elements
+    private Button btnMainSignUp, btnMainLogIn;
     private static final int PERMISSION_REQUEST_CODE = 1001;
 
+    /**
+     * Called when the activity is first created.
+     * Sets up UI, requests permissions, starts services, and applies animations.
+     *
+     * @param savedInstanceState Bundle containing saved state (if any).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Request permissions for Android 13/14 if needed
+        // Check and request required permissions
         checkAndRequestPermissions();
 
-
-        // Start MyService for notifications
+        // Start MyService for notifications or background tasks
         startService(new Intent(this, MyService.class));
 
-        // Initialize views
+        // Initialize UI components
         btnMainSignUp = findViewById(R.id.btnMainSignUp);
         btnMainLogIn = findViewById(R.id.btnMainLogIn);
 
-        // Set click listeners
+        // Set click listeners for buttons
         btnMainSignUp.setOnClickListener(this);
         btnMainLogIn.setOnClickListener(this);
 
-        // Load animations from the res/anim folder
+        // Load animations from resources
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
 
-
-        // Apply fade in animation to the entire layout (LinearLayout with id "main")
+        // Apply fade-in animation to the main layout
         View mainLayout = findViewById(R.id.main);
         mainLayout.startAnimation(fadeIn);
 
-        // Apply slide in animation to the buttons
+        // Apply slide-in animation to buttons
         btnMainSignUp.startAnimation(slideIn);
         btnMainLogIn.startAnimation(slideIn);
-
-        Toast.makeText(this, "Main Activity Loaded", Toast.LENGTH_SHORT).show();
-
     }
 
-    // Example: Refactored method for checking permissions
+    /**
+     * Checks for required permissions and requests them if not already granted.
+     * Also handles scheduling exact alarms for Android S and above.
+     */
     private void checkAndRequestPermissions() {
+        // Request POST_NOTIFICATIONS permission on Android 13 (TIRAMISU) and above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
             }
         }
+        // Request permission to schedule exact alarms on Android S and above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
             if (alarmManager != null && !alarmManager.canScheduleExactAlarms()) {
@@ -75,19 +89,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
+    /**
+     * Handles click events for the buttons.
+     * Applies a button press animation before navigating to the appropriate screen.
+     *
+     * @param view The view that was clicked.
+     */
     @Override
     public void onClick(View view) {
+        // Load the button press animation
         Animation buttonPress = AnimationUtils.loadAnimation(this, R.anim.button_press);
-
         buttonPress.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                // Not used, I have to use it because of the build of AnimationListener that needs it
+                // No action needed at start
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                // Navigate based on which button was clicked
                 if (view == btnMainSignUp) {
                     startActivity(new Intent(MainActivity.this, SignupActivity.class));
                 } else if (view == btnMainLogIn) {
@@ -97,13 +117,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                // Not used, I have to use it because of the build of AnimationListener that needs it
+                // No action needed on repeat
             }
         });
-
         view.startAnimation(buttonPress);
     }
 
+    /**
+     * Inflates the options menu from the resource file.
+     *
+     * @param menu The menu to be inflated.
+     * @return True if the menu is successfully created.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -111,16 +136,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    /**
+     * Handles menu item selection and navigates to the corresponding activity.
+     *
+     * @param item The selected menu item.
+     * @return True if the item selection is handled.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_main) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_main) {
             startActivity(new Intent(this, MainActivity.class));
-        } else if (item.getItemId() == R.id.menu_Login) {
+        } else if (itemId == R.id.menu_Login) {
             startActivity(new Intent(this, LoginActivity.class));
-        } else if (item.getItemId() == R.id.menu_SignUp) {
+        } else if (itemId == R.id.menu_SignUp) {
             startActivity(new Intent(this, SignupActivity.class));
-        } else if (item.getItemId() == R.id.menu_ForgotPassword) {
-            startActivity(new Intent(this, com.example.mypoject1.ForgotPasswordActivity.class));
+        } else if (itemId == R.id.menu_ForgotPassword) {
+            startActivity(new Intent(this, ForgotPasswordActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

@@ -104,8 +104,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.menu_logout) {
             intent = new Intent(this, MainActivity.class);
             finish();
-        } else if (id == R.id.menu_camera) {
-            intent = new Intent(this, CameraActivity.class);
         } else if (id == R.id.menu_timer) {
             intent = new Intent(this, TimerActivity.class);
         } else if (id == R.id.menu_userdetails) {
