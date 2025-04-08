@@ -55,13 +55,13 @@ public class CameraActivity extends Activity {
         ImageButton btnBackCamera = findViewById(R.id.btnBack);
         btnBackCamera.setOnClickListener(v -> {
             setResult(RESULT_CANCELED);
-            finish(); // Close the activity on back button press
+            finish();
         });
 
         // Start the camera intent if a valid URI is obtained.
         if (imageUri != null) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); // Save photo to the provided URI
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             startActivityForResult(intent, CAMERA_REQUEST_CODE);
         } else {
             Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
@@ -88,18 +88,15 @@ public class CameraActivity extends Activity {
 
                 // Create an intent to pass the photo URI back to the calling activity.
                 Intent resultIntent = new Intent();
-                resultIntent.setData(imageUri); // Set the photo URI
+                resultIntent.setData(imageUri);
                 setResult(RESULT_OK, resultIntent);
             } catch (Exception e) {
-                // If an error occurs, set result as canceled.
                 setResult(RESULT_CANCELED);
             }
         } else {
-            // Handle the case where photo capture was canceled.
             Toast.makeText(this, "Photo capture canceled", Toast.LENGTH_SHORT).show();
             setResult(RESULT_CANCELED);
         }
-        // Close the activity after handling the result.
         finish();
     }
 }

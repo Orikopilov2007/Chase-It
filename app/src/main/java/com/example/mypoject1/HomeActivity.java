@@ -98,19 +98,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = null;
-        int id = item.getItemId();
-        if (id == R.id.menu_home) {
+        if (item.getItemId() == R.id.menu_home) {
             intent = new Intent(this, HomeActivity.class);
-        } else if (id == R.id.menu_logout) {
+        } else if (item.getItemId() == R.id.menu_logout) {
             intent = new Intent(this, MainActivity.class);
             finish();
-        } else if (id == R.id.menu_timer) {
+        } else if (item.getItemId() == R.id.menu_timer) {
             intent = new Intent(this, TimerActivity.class);
-        } else if (id == R.id.menu_userdetails) {
+        } else if (item.getItemId() == R.id.menu_userdetails) {
             intent = new Intent(this, UserDetailsActivity.class);
-        } else if (id == R.id.menu_ForgotPassword) {
-            intent = new Intent(this, ForgotPasswordActivity.class);
-        } else if(id == R.id.menu_ChatBot){
+        } else if(item.getItemId() == R.id.menu_ChatBot){
             intent = new Intent(this, ChatbotActivity.class);
         }
         startActivity(intent);

@@ -1,14 +1,30 @@
 [
   {
-    "prompt": "What are some hydration tips for runners?",
-    "completion": "Make sure to drink water before, during, and after your run. For longer runs, consider a sports drink to replenish electrolytes."
+    "prompt": "What are some effective hydration tips for runners?",
+    "completion": "Hydrate consistently throughout the day. Drink water before, during, and after runs. For longer distances, consider electrolyte-rich sports drinks to replenish sodium, potassium, and magnesium lost through sweat."
   },
   {
-    "prompt": "How important is protein for runners?",
-    "completion": "Protein is crucial for runners to repair muscles after a run. Include lean protein sources such as chicken, fish, or legumes in your diet."
+    "prompt": "Why is protein essential for runners?",
+    "completion": "Protein is critical for repairing and building muscle tissue after strenuous exercise. Incorporating lean sources like chicken, fish, legumes, or plant-based proteins helps speed recovery and maintain muscle mass."
   },
   {
-    "prompt": "What foods should I avoid before running?",
-    "completion": "Avoid heavy, greasy, or spicy foods before running, as they can cause stomach discomfort or cramps. Stick to light, easily digestible foods."
+    "prompt": "What foods should be avoided before running?",
+    "completion": "Avoid heavy, greasy, or highly processed foods that are difficult to digest. Foods high in fat or fiber may cause gastrointestinal distress during running. Stick to light, easily digestible carbohydrates for pre-run energy."
+  },
+  {
+    "prompt": "How can runners optimize their carbohydrate intake?",
+    "completion": "Focus on consuming complex carbohydrates for sustained energy, such as whole grains and starchy vegetables. Timing is also key: simple carbohydrates can be added around workouts for an extra energy boost, while complex carbs should form the meal foundation."
+  },
+  {
+    "prompt": "What are some key recovery nutrition tips after an intense run?",
+    "completion": "Post-run, consume a balanced mix of proteins and carbohydrates within 30 minutes to an hour. This replenishes glycogen stores and aids muscle recovery. Include anti-inflammatory foods like berries, leafy greens, and nuts to support overall recovery."
+  },
+  {
+    "prompt": "How do antioxidants benefit a runner’s diet?",
+    "completion": "Antioxidants help neutralize free radicals produced during intense exercise, reducing oxidative stress and muscle inflammation. Foods high in antioxidants—such as berries, dark chocolate, and green leafy vegetables—are especially beneficial."
+  },
+  {
+    "prompt": "What supplements might benefit runners and how should they be used?",
+    "completion": "Common supplements include vitamin D, omega-3 fatty acids, magnesium, and sometimes iron (if deficient). However, it’s best to obtain nutrients from a balanced diet and consult with a healthcare provider before starting any supplement regimen."
   }
 ]

@@ -45,10 +45,10 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         // Build the interactive notification with a snooze action button.
         Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.my_logo)  // Replace with your app's drawable icon.
+                .setSmallIcon(R.drawable.my_logo)
                 .setContentTitle("Daily Message")
                 .setContentText(message)
-                .addAction(R.drawable.ic_snooze, "Snooze", snoozePendingIntent) // Adds the snooze button.
+                .addAction(R.drawable.ic_snooze, "Snooze", snoozePendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .build();

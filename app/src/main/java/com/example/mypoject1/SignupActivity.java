@@ -41,8 +41,6 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private EditText etSignupEmail, etSignupPassword, etSignupFname, etSignupLname, etSignupPhone, etSignupYOB;
     private Button btnSignup, btnBack;
     private ProgressBar progressBar;
-
-    // Firebase Authentication instance
     private FirebaseAuth fbAuth;
 
     /**

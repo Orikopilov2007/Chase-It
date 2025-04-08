@@ -1,14 +1,30 @@
 [
   {
-    "prompt": "What are the best foods for runners?",
-    "completion": "The best foods for runners include bananas for potassium, oats for sustained energy, and salmon for omega-3 fatty acids and protein."
+    "prompt": "What are the best foods to include in a runner’s diet?",
+    "completion": "Runners should focus on whole, nutrient-dense foods such as whole grains, lean proteins, fruits, vegetables, nuts, and seeds. Foods like bananas, oats, salmon, and leafy greens provide energy, reduce inflammation, and support muscle recovery."
   },
   {
-    "prompt": "How does oatmeal help runners?",
-    "completion": "Oatmeal provides complex carbohydrates that release energy slowly, making it a great option for breakfast before a long run."
+    "prompt": "How does oatmeal benefit runners?",
+    "completion": "Oatmeal offers complex carbohydrates that provide sustained energy release. Its high fiber content aids digestion and helps maintain steady blood sugar levels during long training sessions."
   },
   {
-    "prompt": "Why is salmon good for runners?",
-    "completion": "Salmon is rich in omega-3 fatty acids, which reduce inflammation, and protein, which aids in muscle recovery after a run."
+    "prompt": "Why is salmon considered beneficial for runners?",
+    "completion": "Salmon is an excellent source of omega-3 fatty acids, which reduce inflammation, and high-quality protein, which is essential for muscle repair and recovery after intense workouts."
+  },
+  {
+    "prompt": "What is the importance of leafy greens in a runner’s diet?",
+    "completion": "Leafy greens like spinach and kale are packed with vitamins, minerals, and antioxidants. They help reduce oxidative stress, combat inflammation, and support overall health and recovery."
+  },
+  {
+    "prompt": "How do berries contribute to a runner's nutritional needs?",
+    "completion": "Berries are high in antioxidants and vitamins, which help fight inflammation and muscle damage caused by intense exercise. They also provide a quick source of carbohydrates for energy."
+  },
+  {
+    "prompt": "What are some high-energy snack ideas for runners on the go?",
+    "completion": "High-energy snacks include trail mix, energy bars, fruit with nut butter, and whole-grain crackers with hummus. These snacks offer a blend of complex carbohydrates, protein, and healthy fats for sustained energy."
+  },
+  {
+    "prompt": "How can runners incorporate hydration-rich foods into their diet?",
+    "completion": "Foods such as watermelon, cucumbers, oranges, and strawberries have high water content. Including these in meals and snacks can help maintain hydration levels alongside regular fluid intake."
   }
 ]

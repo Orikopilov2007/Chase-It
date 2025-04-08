@@ -63,7 +63,7 @@ public class ChatbotActivity extends AppCompatActivity {
     private static final String OPENAI_API_KEY = "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";
     private static final String TAG = "chatbot";
     private static final int FILE_SELECT_CODE = 100;
-    private static final int TOKEN_LIMIT = 16000; // Threshold for token limit
+    private static final int TOKEN_LIMIT = 16000;
 
     // UI elements
     private TextInputEditText userInput;
@@ -88,7 +88,7 @@ public class ChatbotActivity extends AppCompatActivity {
     private static class CoachEntry {
         String prompt;
         String completion;
-        String combined; // Format: "Prompt: ... Answer: ..."
+        String combined;
     }
 
     // List to store parsed coach data entries from assets
@@ -110,8 +110,8 @@ public class ChatbotActivity extends AppCompatActivity {
         setupChatRecyclerView();
         setupUserInputListener();
         setupNewThreadButton();
-        startNewThread();  // Initialize a new conversation thread
-        loadRunningCoachData();  // Load and parse JSON dataset entries
+        startNewThread();
+        loadRunningCoachData();
 
         // Start animations for various UI elements
         startUIAnimations();
@@ -179,9 +179,7 @@ public class ChatbotActivity extends AppCompatActivity {
         setSendButtonState(false);
         userInput.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // No action required before text change.
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -189,9 +187,7 @@ public class ChatbotActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                // No action required after text change.
-            }
+            public void afterTextChanged(Editable s) { }
         });
     }
 
@@ -359,7 +355,6 @@ public class ChatbotActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the options menu
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
@@ -367,12 +362,20 @@ public class ChatbotActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle menu item selections
-        int id = item.getItemId();
-        if (id == R.id.menu_home) {
-            startActivity(new Intent(this, HomeActivity.class));
-            return true;
+        Intent intent = null;
+        if (item.getItemId() == R.id.menu_home) {
+            intent = new Intent(this, HomeActivity.class);
+        } else if (item.getItemId() == R.id.menu_logout) {
+            intent = new Intent(this, MainActivity.class);
+            finish();
+        } else if (item.getItemId() == R.id.menu_timer) {
+            intent = new Intent(this, TimerActivity.class);
+        } else if (item.getItemId() == R.id.menu_userdetails) {
+            intent = new Intent(this, UserDetailsActivity.class);
+        } else if(item.getItemId() == R.id.menu_ChatBot){
+            intent = new Intent(this, ChatbotActivity.class);
         }
+        startActivity(intent);
         return super.onOptionsItemSelected(item);
     }
 
@@ -383,12 +386,13 @@ public class ChatbotActivity extends AppCompatActivity {
         try {
             JSONObject systemMessage = new JSONObject();
             systemMessage.put("role", "system");
-            systemMessage.put("content", "You are a knowledgeable running coach and nutrition expert. Provide detailed advice on running training practices and nutritional guidance when appropriate. For general questions, offer a helpful answer while gently connecting the topic to running or nutrition when relevant.");
+            systemMessage.put("content", "You are an expert running coach and nutrition specialist with in-depth knowledge of training methodologies, recovery strategies, and nutritional science. Provide detailed, evidence-based advice on running techniques, endurance and strength training, injury prevention, and recovery. For all questions, ensure your responses are comprehensive and actionable, and whenever possible, seamlessly integrate relevant insights on running, exercise, and nutrition.");
             conversationHistory.put(systemMessage);
         } catch (JSONException e) {
             Log.e(TAG, "Error adding system prompt", e);
         }
     }
+
 
     /**
      * Checks the total token count of the conversation and summarizes older messages if necessary.
@@ -444,7 +448,9 @@ public class ChatbotActivity extends AppCompatActivity {
      * Sends the user's message along with dynamically selected context to the chatbot.
      */
     private void sendMessage() {
+        // Get and sanitize user input
         String message = userInput.getText().toString().trim();
+        message = sanitizeMessage(message);
         if (!message.isEmpty() && !isWaitingForResponse) {
             // Append user message to chat and conversation history
             ChatMessage chatMessage = new ChatMessage("user", message);
@@ -525,6 +531,8 @@ public class ChatbotActivity extends AppCompatActivity {
             if (fileUri != null) {
                 try {
                     String fileContent = readFileContent(fileUri);
+                    // Sanitize file content as well
+                    fileContent = sanitizeMessage(fileContent);
                     ChatMessage fileMessage = new ChatMessage("user", "File:\n" + fileContent);
                     addMessage(fileMessage);
                     appendToConversation("user", fileContent);
@@ -618,5 +626,19 @@ public class ChatbotActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * Sanitizes input messages by removing potentially dangerous characters.
+     *
+     * This method removes characters such as '<', '>', '{', '}', and backticks.
+     * Adjust the regular expression if you wish to allow or disallow other characters.
+     *
+     * @param message The input message to sanitize.
+     * @return A sanitized version of the message.
+     */
+    private String sanitizeMessage(String message) {
+        if (message == null) return "";
+        return message.replaceAll("[<>\\{\\}`]", "");
     }
 }

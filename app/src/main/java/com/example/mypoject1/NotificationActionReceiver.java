@@ -23,9 +23,6 @@ public class NotificationActionReceiver extends BroadcastReceiver {
         if ("SNOOZE_ACTION".equals(intent.getAction())) {
             // Notify user with a Toast message
             Toast.makeText(context, "Notification snoozed for 10 minutes", Toast.LENGTH_SHORT).show();
-
-            // TODO: Implement logic to reschedule the notification after 10 minutes
-            // This could include setting an AlarmManager or WorkManager task
         }
     }
 }

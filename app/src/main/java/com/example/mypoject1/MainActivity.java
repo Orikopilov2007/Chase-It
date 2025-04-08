@@ -13,8 +13,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -59,11 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
 
-        // Apply fade-in animation to the main layout
         View mainLayout = findViewById(R.id.main);
         mainLayout.startAnimation(fadeIn);
 
-        // Apply slide-in animation to buttons
         btnMainSignUp.startAnimation(slideIn);
         btnMainLogIn.startAnimation(slideIn);
     }
@@ -102,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonPress.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                // No action needed at start
             }
 
             @Override
@@ -117,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                // No action needed on repeat
             }
         });
         view.startAnimation(buttonPress);

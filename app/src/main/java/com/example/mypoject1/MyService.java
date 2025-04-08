@@ -59,13 +59,10 @@ public class MyService extends Service {
     /**
      * Used to bind to the service. Since this service does not support binding, it returns null.
      */
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-
-    // Create notification channel for Android O and above
 
     /**
      * Creates a notification channel for devices running Android O and above.
@@ -84,8 +81,6 @@ public class MyService extends Service {
             }
         }
     }
-
-    // Static method to schedule an exact alarm for the notification.
 
     /**
      * Schedules an exact alarm to send a notification at a specified time.
@@ -107,7 +102,7 @@ public class MyService extends Service {
         intent.putExtra("minute", minute);
 
         // Generate a unique request code based on time
-        int requestCode = hour * 100 + minute; // Unique request code based on time
+        int requestCode = hour * 100 + minute;
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context,
                 requestCode,

@@ -66,11 +66,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
 
-        // Apply fade-in animation to the main layout
         View mainLayout = findViewById(R.id.main);
         mainLayout.startAnimation(fadeIn);
-
-        // Animate interactive elements with a slide-in effect
         animateView(btnLogin, slideIn);
         animateView(btnForgotPassword, slideIn);
         animateView(btnBack, slideIn);
@@ -116,7 +113,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         buttonPress.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                // Not needed
             }
 
             @Override
@@ -134,7 +130,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                // Not needed
             }
         });
         view.startAnimation(buttonPress);
@@ -146,7 +141,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void handleLogin() {
         clearErrors();
-        progressBar.setVisibility(View.VISIBLE); // Show progress indicator
+        progressBar.setVisibility(View.VISIBLE);
 
         String email = sanitizeInput(etLoginEmail.getText().toString());
         String pass = etLoginPassword.getText().toString();

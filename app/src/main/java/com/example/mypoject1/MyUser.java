@@ -15,46 +15,22 @@ public class MyUser {
         this.lastName = lastName;
         this.phone = phone;
         this.yob = yob;
-        this.profileImageUri = profileImageUri;  // Initialize the profile image URI
+        this.profileImageUri = profileImageUri;
     }
 
     public String getFirstName() {
         return firstName;
     }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
     }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getPhone() {
         return phone;
     }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public int getYob() {
         return yob;
     }
-
-    public void setYob(int yob) {
-        this.yob = yob;
-    }
-
     public String getProfileImageUri() {
         return profileImageUri;
-    }
-
-    public void setProfileImageUri(String profileImageUri) {
-        this.profileImageUri = profileImageUri;
     }
 }

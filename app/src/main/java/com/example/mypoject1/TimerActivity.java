@@ -65,11 +65,8 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
     LinearLayout workoutSummaryDialog;
     TextView tvStopwatch, tvCountDown, tvSteps, tvDistance;
 
-    // MapView for location display
     private MapView mapView;
     private GoogleMap gMap;
-
-    // API usage: Firebase Firestore is used to store workout summary data remotely.
     private FirebaseFirestore db;
 
     // Route tracking fields
@@ -87,17 +84,13 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
     // Sensor-related fields
     private SensorManager sensorManager;
     private Sensor stepCounterSensor;
-    private Sensor accelerometerSensor; // Advanced subject: using accelerometer sensor
+    private Sensor accelerometerSensor;
     private float initialStepCount = -1;
-
-    // Counters (updated via sensor events)
     int stepCount = 0;
     double distanceCovered = 0.0;
 
     // Accelerometer data storage for later analysis (advanced subject: sensor data processing)
     private List<float[]> accelerometerData = new ArrayList<>();
-
-    // Total elapsed time used for speed calculation
     long totalElapsedTime = 0;
     private float latestSensorReading = -1;
 
@@ -213,7 +206,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         tvWorkoutSummary = findViewById(R.id.tvWorkoutSummary);
         tvTotalSteps = findViewById(R.id.tvTotalSteps);
         tvTotalDistance = findViewById(R.id.tvTotalDistance);
-        tvAverageSpeed = findViewById(R.id.tvAverageSpeed); // New TextView for average speed
+        tvAverageSpeed = findViewById(R.id.tvAverageSpeed);
         btnCloseDialog = findViewById(R.id.btnCloseDialog);
         btnShareSummary = findViewById(R.id.btnShareSummary);
         mapView = findViewById(R.id.mapView);
@@ -721,8 +714,6 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
 
     /**
      * Shares the workout summary using an implicit intent.
-     *
-     * API usage: Android Intent API (ACTION_SEND) is used to share data with other apps.
      */
     private void shareWorkoutSummary() {
         String shareContent = "Workout Summary:\n" +
@@ -778,8 +769,6 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
             intent = new Intent(this, TimerActivity.class);
         } else if (item.getItemId() == R.id.menu_userdetails) {
             intent = new Intent(this, UserDetailsActivity.class);
-        } else if (item.getItemId() == R.id.menu_ForgotPassword) {
-            intent = new Intent(this, ForgotPasswordActivity.class);
         } else if(item.getItemId() == R.id.menu_ChatBot){
             intent = new Intent(this, ChatbotActivity.class);
         }

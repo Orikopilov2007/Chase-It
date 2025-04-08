@@ -3,7 +3,6 @@ package com.example.mypoject1;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,26 +18,20 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.yalantis.ucrop.UCrop;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import android.app.Dialog;
 import android.content.Context;
-import android.view.View;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.GridView;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 
@@ -49,14 +42,11 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
     ImageView ivProfilePhoto;
     Button btnLogout, btnDeleteAccount, btnBack, btnForgotPassword;
     private static final String TAG = "UserDetailsActivity";
-
-    // Variable to store profile image URI
     Uri profileImageUri;
 
     // Constants for Request Codes
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int GALLERY_REQUEST_CODE = 101;
-    private static final int STORAGE_GALLERY_REQUEST_CODE = 102;
     private static final int UCROP_REQUEST_CODE = UCrop.REQUEST_CROP;
 
     @Override
@@ -123,7 +113,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                         .transform(new CircleCrop())
                         .into(ivProfilePhoto);
             } else {
-                // Optionally set the default image if no URI is available
+                // Set the default image if no URI is available
                 ivProfilePhoto.setImageResource(R.drawable.default_user_photo);
             }
         }).addOnFailureListener(e -> {
@@ -155,7 +145,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                             .setTitle("Delete Account")
                             .setMessage("Are you sure you want to delete your account? This action cannot be undone.")
                             .setPositiveButton("Yes", (dialog, which) -> {
-                                String uid = FirebaseAuth.getInstance().getUid();  // Store UID before deletion
+                                String uid = FirebaseAuth.getInstance().getUid();
                                 if(uid == null) {
                                     // Handle the case where UID is null (user not logged in)
                                     return;
@@ -257,11 +247,6 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         startActivityForResult(intent, CAMERA_REQUEST_CODE);
     }
 
-    private void pickImageFromGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, GALLERY_REQUEST_CODE);
-    }
-
     // Show Firebase Gallery in a custom dialog with thumbnails
     private void showFirebaseGalleryDialog() {
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -340,7 +325,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    // תהליך חיתוך באמצעות UCrop
+    // Editing using UCrop
     private void startCrop(Uri sourceUri) {
         Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "cropped_" + UUID.randomUUID().toString() + ".jpg"));
         UCrop.Options options = new UCrop.Options();
@@ -424,8 +409,6 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
             intent = new Intent(this, TimerActivity.class);
         } else if (item.getItemId() == R.id.menu_userdetails) {
             intent = new Intent(this, UserDetailsActivity.class);
-        } else if (item.getItemId() == R.id.menu_ForgotPassword) {
-            intent = new Intent(this, ForgotPasswordActivity.class);
         } else if(item.getItemId() == R.id.menu_ChatBot){
             intent = new Intent(this, ChatbotActivity.class);
         }

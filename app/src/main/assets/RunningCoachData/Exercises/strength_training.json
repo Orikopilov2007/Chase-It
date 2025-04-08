@@ -1,14 +1,30 @@
 [
   {
-    "prompt": "What are some strength training exercises for runners?",
-    "completion": "Strength training exercises for runners include squats, lunges, leg presses, and core exercises like planks to improve muscle endurance and prevent injuries."
+    "prompt": "What are some effective strength training exercises for runners?",
+    "completion": "Effective exercises include squats, lunges, deadlifts, and core workouts like planks and bridges. These exercises target key muscle groups used in running, enhancing power and endurance."
   },
   {
     "prompt": "Why is strength training important for runners?",
-    "completion": "Strength training helps improve running performance by strengthening muscles, increasing stability, and reducing the risk of injury."
+    "completion": "Strength training improves running performance by increasing muscle strength, enhancing stability, and reducing the risk of overuse injuries. It also contributes to better posture and running mechanics."
   },
   {
-    "prompt": "How often should runners do strength training?",
-    "completion": "Runners should aim for 2-3 strength training sessions per week, focusing on legs, core, and upper body."
+    "prompt": "How often should runners engage in strength training?",
+    "completion": "Ideally, runners should incorporate 2-3 sessions per week, ensuring that the workouts complement running sessions and allow for adequate recovery between strength and endurance days."
+  },
+  {
+    "prompt": "What equipment is recommended for effective at-home strength training?",
+    "completion": "At-home equipment can include adjustable dumbbells, resistance bands, a stability ball, and a bench. These tools allow for a variety of exercises targeting different muscle groups critical for runners."
+  },
+  {
+    "prompt": "How can I incorporate plyometrics into my running training regimen?",
+    "completion": "Plyometrics such as box jumps, jump squats, and burpees improve explosive strength and power. Include them 1-2 times per week with proper warm-up to avoid injury and maximize benefits."
+  },
+  {
+    "prompt": "What are compound exercises and why are they beneficial for runners?",
+    "completion": "Compound exercises like deadlifts, squats, and bench presses engage multiple muscle groups simultaneously, enhancing overall strength, balance, and coordination—essential factors for injury prevention and improved running efficiency."
+  },
+  {
+    "prompt": "How can progressive overload be applied in a strength training program for runners?",
+    "completion": "Progressive overload involves gradually increasing resistance or volume to continuously challenge muscles. Runners can add weights, increase repetitions, or modify exercises to ensure steady strength gains while maintaining proper form."
   }
 ]

@@ -51,7 +51,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         buttonPress.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                // Not used but required by interface
             }
 
             @Override
@@ -65,7 +64,6 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                // Not used
             }
         });
 
@@ -151,22 +149,13 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     }
 
     /**
-     * Navigates the user back to the Login screen.
-     */
-    private void goToHomeActivity() {
-        Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    /**
      * Sanitizes the input by removing any potentially harmful characters.
      *
      * @param input the string to sanitize
      * @return sanitized string
      */
     private String sanitizeInput(String input) {
-        return input.replaceAll("[<>\"'/]", "");  // Removes dangerous characters
+        return input.replaceAll("[<>\"'/]", "");
     }
 
     /**

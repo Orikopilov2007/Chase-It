@@ -112,7 +112,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76820977-dcd5-4b26-bc39-d22aef98043d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_new_thread.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Exercises/endurance_training.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Health_And_Recovery/injury_prevention.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Health_And_Recovery/mental_health.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Health_And_Recovery/post_run_recovery.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Nutrition/performance_nutritions.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.9/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.9/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.9/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.9/fileHashes/fileHashes.bin" afterDir="false" />
@@ -121,23 +125,29 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Exercises/running.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Exercises/running.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Exercises/strength_training.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Exercises/strength_training.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Exercises/stretching.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Exercises/stretching.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Nutrition/daily_meals.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Nutrition/daily_meals.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Nutrition/foods_for_runners.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Nutrition/foods_for_runners.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Nutrition/nutrition_tips.json" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/assets/RunningCoachData/Nutrition/nutrition_tips.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/CameraActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/CameraActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ChatMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ChatMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ChatMessagesAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ChatMessagesAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ChatbotActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ChatbotActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ForgotPasswordActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ForgotPasswordActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/HomeActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/HomeActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/LoginActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/MyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/MyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/MyUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/MyUser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/NotificationActionReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/NotificationActionReceiver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/NotificationReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/NotificationReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/PhotoViewerActivity.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/SignupActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/SignupActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/SplashActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/SplashActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/UserDetailsActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/UserDetailsActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ZoomableImageActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/ZoomableImageActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_chatbot.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_chatbot.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/navigation_menu.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -437,17 +447,17 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/UserDetailsActivity.java</url>
-          <line>379</line>
+          <line>364</line>
           <option name="timeStamp" value="93" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/MainActivity.java</url>
-          <line>64</line>
+          <line>61</line>
           <option name="timeStamp" value="112" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/mypoject1/TimerActivity.java</url>
-          <line>632</line>
+          <line>625</line>
           <option name="timeStamp" value="117" />
         </line-breakpoint>
       </breakpoints>
