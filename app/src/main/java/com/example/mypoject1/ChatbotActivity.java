@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -93,6 +94,8 @@ public class ChatbotActivity extends AppCompatActivity {
 
     // List to store parsed coach data entries from assets
     private List<CoachEntry> coachEntries = new ArrayList<>();
+    private HashMap<String, List<CoachEntry>> keywordIndex = new HashMap<>();
+
 
     /**
      * Called when the activity is starting. Sets up UI, conversation thread, and loads assets.
@@ -209,7 +212,7 @@ public class ChatbotActivity extends AppCompatActivity {
         Animation zoomIn = AnimationUtils.loadAnimation(this, R.anim.zoom_in);
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in);
 
-        View mainLayout = findViewById(R.id.main_layout);
+        View mainLayout = findViewById(R.id.main);
         mainLayout.startAnimation(fadeIn);
         View header = findViewById(R.id.chatbotHeader);
         if (header != null) {
@@ -256,13 +259,12 @@ public class ChatbotActivity extends AppCompatActivity {
                             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                             StringBuilder fileContent = new StringBuilder();
                             String line;
-                            // Read the file line by line
                             while ((line = reader.readLine()) != null) {
                                 fileContent.append(line).append("\n");
                             }
                             reader.close();
+
                             try {
-                                // Parse the file content as a JSON array
                                 JSONArray jsonArray = new JSONArray(fileContent.toString());
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject obj = jsonArray.getJSONObject(i);
@@ -271,6 +273,13 @@ public class ChatbotActivity extends AppCompatActivity {
                                     entry.completion = obj.optString("completion");
                                     entry.combined = "Prompt: " + entry.prompt + "\nAnswer: " + entry.completion;
                                     coachEntries.add(entry);
+
+                                    // Tokenize and index keywords
+                                    String[] words = (entry.prompt + " " + entry.completion).toLowerCase().split("\\W+");
+                                    for (String word : words) {
+                                        if (word.length() < 3) continue; // skip short/common words
+                                        keywordIndex.computeIfAbsent(word, k -> new ArrayList<>()).add(entry);
+                                    }
                                 }
                             } catch (JSONException je) {
                                 Log.e(TAG, "Error parsing JSON in file: " + file, je);
@@ -284,6 +293,7 @@ public class ChatbotActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Selects relevant context from the loaded coach entries based on the user's query.
      *
@@ -291,24 +301,42 @@ public class ChatbotActivity extends AppCompatActivity {
      * @return A string containing relevant context information.
      */
     private String getRelevantContext(String userQuery) {
-        StringBuilder relevantContext = new StringBuilder();
-        String[] queryWords = userQuery.toLowerCase().split("\\s+");
-        // Evaluate each coach entry for keyword matches
-        for (CoachEntry entry : coachEntries) {
-            int matchScore = 0;
-            String combinedLower = entry.combined.toLowerCase();
-            for (String word : queryWords) {
-                if (combinedLower.contains(word)) {
-                    matchScore++;
+        String[] queryWords = userQuery.toLowerCase().split("\\W+");
+        HashMap<CoachEntry, Integer> entryScores = new HashMap<>();
+
+        for (String word : queryWords) {
+            List<CoachEntry> entries = keywordIndex.get(word);
+            if (entries != null) {
+                for (CoachEntry entry : entries) {
+                    entryScores.put(entry, entryScores.getOrDefault(entry, 0) + 1);
                 }
             }
-            // Append if a minimum match threshold is reached
-            if (matchScore >= 2) {
-                relevantContext.append(entry.combined).append("\n\n");
-            }
         }
-        return relevantContext.toString();
+
+        // Sort entries by score (number of keyword hits)
+        List<CoachEntry> topMatches = new ArrayList<>(entryScores.keySet());
+        topMatches.sort((a, b) -> entryScores.get(b) - entryScores.get(a));
+
+        // Return top 3 matches
+        StringBuilder contextBuilder = new StringBuilder();
+        int count = 0;
+        for (CoachEntry entry : topMatches) {
+            String[] words = entry.combined.split("\\s+");
+            int limit = Math.min(words.length, 100); // max 100 words
+            StringBuilder shortEntry = new StringBuilder();
+            for (int i = 0; i < limit; i++) {
+                shortEntry.append(words[i]).append(" ");
+            }
+            contextBuilder.append(shortEntry.toString().trim()).append("...\n\n");
+
+            if (++count >= 3) break;
+
+        }
+
+        return contextBuilder.toString();
     }
+
+
 
     /**
      * Handles click events for various buttons (back, send message, attach file).
@@ -386,12 +414,40 @@ public class ChatbotActivity extends AppCompatActivity {
         try {
             JSONObject systemMessage = new JSONObject();
             systemMessage.put("role", "system");
-            systemMessage.put("content", "You are an expert running coach and nutrition specialist with in-depth knowledge of training methodologies, recovery strategies, and nutritional science. Provide detailed, evidence-based advice on running techniques, endurance and strength training, injury prevention, and recovery. For all questions, ensure your responses are comprehensive and actionable, and whenever possible, seamlessly integrate relevant insights on running, exercise, and nutrition.");
+            systemMessage.put("content",
+                    "You are RunWell Coach, a professional AI coach trained in three core domains: running training, nutritional planning, and general health & recovery.\n\n" +
+                            "Your primary task is to assist users as a personal trainer, nutritionist, and wellness guide. You are friendly, clear, supportive, and motivating — but never robotic or vague.\n\n" +
+                            "🔍 IMPORTANT: How You Find Information\n" +
+                            "Always follow this search order when responding:\n" +
+                            "1. Search the uploaded files for answers — especially for data on running, nutrition, and health trends.\n" +
+                            "2. If no useful answer is found, fall back to your internal knowledge and best practices.\n" +
+                            "3. If still unclear, suggest retrieving updated info online (only when appropriate).\n\n" +
+                            "🏃 RUNNING COACH DUTIES:\n" +
+                            "• Create custom running plans for all fitness levels.\n" +
+                            "• Tailor plans to user goals (5K, 10K, half marathon, weight loss, stamina).\n" +
+                            "• Include rest days, warm-ups, cool-downs, and cross-training suggestions.\n" +
+                            "• Provide technique advice (cadence, posture, stride, breathing).\n" +
+                            "• Help prevent injuries.\n\n" +
+                            "🥗 NUTRITIONIST DUTIES:\n" +
+                            "• Give meal suggestions based on user goals.\n" +
+                            "• Adapt to dietary needs (vegan, gluten-free, etc.).\n" +
+                            "• Recommend pre/post-workout meals and hydration strategies.\n\n" +
+                            "🩺 HEALTH & RECOVERY DUTIES:\n" +
+                            "• Teach foam rolling, HRV, sleep tracking, recovery.\n" +
+                            "• Encourage consistent habits and mental wellness.\n" +
+                            "• Always prioritize long-term health over short-term gains.\n\n" +
+                            "❗ RULES & ETHICS:\n" +
+                            "• Always ask clarifying questions if needed.\n" +
+                            "• NEVER diagnose medical conditions.\n" +
+                            "• Do not recommend unsafe diets or supplements.\n\n" +
+                            "You are always helpful, encouraging, evidence-based, and focused on sustainable success."
+            );
             conversationHistory.put(systemMessage);
         } catch (JSONException e) {
             Log.e(TAG, "Error adding system prompt", e);
         }
     }
+
 
 
     /**
@@ -444,6 +500,20 @@ public class ChatbotActivity extends AppCompatActivity {
         }
     }
 
+    private int estimateTokenCount(JSONArray history) {
+        int total = 0;
+        for (int i = 0; i < history.length(); i++) {
+            try {
+                String content = history.getJSONObject(i).optString("content");
+                total += content.length() / 4; // rough token estimate
+            } catch (JSONException e) {
+                Log.e(TAG, "Token estimation failed", e);
+            }
+        }
+        return total;
+    }
+
+
     /**
      * Sends the user's message along with dynamically selected context to the chatbot.
      */
@@ -462,8 +532,11 @@ public class ChatbotActivity extends AppCompatActivity {
             String relevantContext = getRelevantContext(message);
             if (!relevantContext.isEmpty()) {
                 appendToConversation("system", "Relevant info:\n" + relevantContext);
+                addMessage(new ChatMessage("assistant", "I found some relevant info from your uploaded data to help guide this answer."));
             }
+
             // Check token limit and summarize if necessary
+            Log.d(TAG, "Token estimation: " + estimateTokenCount(conversationHistory));
             checkTokenLimitAndSummarize();
 
             isWaitingForResponse = true;
@@ -571,11 +644,17 @@ public class ChatbotActivity extends AppCompatActivity {
      * @throws JSONException If an error occurs while constructing the JSON payload.
      */
     private void sendToOpenAIUsingHistory() throws IOException, JSONException {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS) // time to establish connection
+                .writeTimeout(30, TimeUnit.SECONDS)   // time to send request
+                .readTimeout(90, TimeUnit.SECONDS)    // time waiting for response
+                .callTimeout(120, TimeUnit.SECONDS)   // full lifecycle
+                .build();
+
 
         // Prepare JSON payload with model and conversation history
         JSONObject jsonBody = new JSONObject();
-        jsonBody.put("model", "gpt-3.5-turbo");
+        jsonBody.put("model", "gpt-4o");
         jsonBody.put("messages", conversationHistory);
 
         RequestBody body = RequestBody.create(jsonBody.toString(), MediaType.parse("application/json"));
