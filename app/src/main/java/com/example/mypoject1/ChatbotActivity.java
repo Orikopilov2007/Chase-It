@@ -1,4 +1,5 @@
 package com.example.mypoject1;
+import com.example.mypoject1.BuildConfig;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -61,7 +62,7 @@ import okhttp3.Response;
 public class ChatbotActivity extends AppCompatActivity {
 
     // OpenAI API configuration and constants
-    private static final String OPENAI_API_KEY = "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";
+    private static final String OPENAI_API_KEY = BuildConfig.OPENAI_API_KEY;
     private static final String TAG = "chatbot";
     private static final int FILE_SELECT_CODE = 100;
     private static final int TOKEN_LIMIT = 16000;
