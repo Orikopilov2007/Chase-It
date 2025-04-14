@@ -44,7 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         app:boxBackgroundColor="@color/background_light"
-        app:hintTextAppearance="@style/HintTextAppearance">
+        app:hintTextAppearance="@style/HintTextAppearance"
+        app:endIconMode="password_toggle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etLoginPassword"
@@ -56,6 +57,7 @@
             android:padding="16dp"
             android:contentDescription="Password Input Field" />
     </com.google.android.material.textfield.TextInputLayout>
+
 
     <!-- Forgot Password Button -->
     <Button

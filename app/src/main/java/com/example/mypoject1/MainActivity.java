@@ -18,9 +18,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.Manifest;
 
 /**
- * MainActivity is the launcher activity for the app .
- * It checks and requests necessary permissions, starts background services,
- * applies animations, and navigates to the Login and Signup screens.
+ * MainActivity
+ * <p>
+ * This is the launcher activity of the application. It acts as the entry point for users
+ * and handles essential app initialization, such as permission requests and background service startup.
+ * It also serves as a navigation hub for login and signup screens and enhances user experience using animations.
+ * </p>
+ *
+ * <p>
+ * Key Features and Flow:
+ * <ul>
+ *   <li>Checks for and requests runtime permissions (like notifications and alarms).</li>
+ *   <li>Starts background services (e.g., MyService).</li>
+ *   <li>Initializes and animates UI components.</li>
+ *   <li>Handles user navigation to LoginActivity and SignupActivity.</li>
+ * </ul>
+ * </p>
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

@@ -10,7 +10,7 @@
     android:padding="32dp"
     tools:context=".HomeActivity">
 
-    <!-- ScrollView to allow scrolling if buttons are too large -->
+    <!-- ScrollView to allow scrolling -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -43,12 +43,12 @@
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center"
-                android:text="Welcome to Chase It, a program that meant to help you track your progress, set goals, and stay motivated with features like progress photos, a built-in timer, personal settings and much more!"
+                android:text="Welcome to Chase It, a program that meant to help you Get better at running, and improve your stamina, You can chat with our Expert chat in running, nutritions and health , A running page with timers, steps, speed and distance counters and a map, and so much more! "
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
                 android:textStyle="italic" />
 
-            <!-- User Details Button with Icon -->
+            <!-- Settings Button -->
             <Button
                 android:id="@+id/btnHomeUserDetails"
                 android:layout_width="match_parent"
@@ -66,10 +66,7 @@
                 android:textColor="@color/button_text"
                 android:textSize="20sp" />
 
-            <!-- Progress Photo Button with Icon -->
-
-            <!-- Timer Button with Icon (smaller height) -->
-
+            <!-- ChatBot Button -->
             <Button
                 android:id="@+id/btnAI"
                 android:layout_width="match_parent"
@@ -87,6 +84,7 @@
                 android:textColor="@color/button_text"
                 android:textSize="20sp" />
 
+            <!-- Running Button -->
             <Button
                 android:id="@+id/btnTimer"
                 android:layout_width="match_parent"
@@ -100,11 +98,11 @@
                 android:elevation="8dp"
                 android:fontFamily="@font/roboto_medium"
                 android:padding="16dp"
-                android:text="Timer"
+                android:text="Running"
                 android:textColor="@color/text_on_primary"
                 android:textSize="20sp" />
 
-            <!-- Logout Button with Icon (smaller height) -->
+            <!-- Logout Button -->
             <Button
                 android:id="@+id/btnLogout"
                 android:layout_width="match_parent"

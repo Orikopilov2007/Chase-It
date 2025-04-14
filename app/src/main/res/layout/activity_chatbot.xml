@@ -20,9 +20,9 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="16dp"
         app:tint="@android:color/white"
-        android:onClick="handleButtonClick" />
+        android:onClick="onClick" />
 
-    <!-- Optional Avatar -->
+    <!-- Avatar -->
     <ImageView
         android:id="@+id/avatarImage"
         android:layout_width="60dp"
@@ -60,7 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
-    <!-- RecyclerView for chat messages -->
+    <!-- RecyclerView to contain chat messages -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
         android:layout_width="0dp"
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="Attach File"
             app:srcCompat="@drawable/ic_attach_file"
-            android:onClick="handleButtonClick"
+            android:onClick="onClick"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -121,19 +121,19 @@
             android:layout_height="wrap_content"
             android:contentDescription="Send message"
             app:srcCompat="@drawable/ic_arrow_up"
-            android:onClick="handleButtonClick"
+            android:onClick="onClick"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- New Conversation Button with Icon (positioned above the bottom bar, near the send button) -->
+    <!-- New Conversation Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/newThreadButton"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New"
+        android:text="New Conversation"
         android:visibility="visible"
         app:icon="@drawable/ic_new_thread"
         app:iconGravity="textStart"

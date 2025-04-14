@@ -3,12 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <!-- Zoomed in profile picture -->
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/photoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter" />
 
+    <!-- Back Button -->
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"

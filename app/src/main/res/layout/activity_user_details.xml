@@ -1,8 +1,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     android:background="@drawable/gradient_background">
 
@@ -37,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Email Field -->
-    <TextView
+    <EditText
         android:id="@+id/tvDetailsEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -48,19 +48,20 @@
         android:textColor="@color/text_primary"
         android:fontFamily="@font/roboto_regular"
         android:elevation="2dp"
+        android:focusable="false"
         app:layout_constraintTop_toBottomOf="@id/ivProfilePhoto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- First Name Field -->
-    <TextView
-        android:id="@+id/tvDetailsFname"
+    <!-- First Name Field (Editable) -->
+    <EditText
+        android:id="@+id/etDetailsFname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="12dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/text_field_background"
-        android:text="First Name"
+        android:hint="First Name"
         android:textColor="@color/text_primary"
         android:fontFamily="@font/roboto_regular"
         android:elevation="2dp"
@@ -68,40 +69,43 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Last Name Field -->
-    <TextView
-        android:id="@+id/tvDetailsLname"
+    <!-- Last Name Field (Editable) -->
+    <EditText
+        android:id="@+id/etDetailsLname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="12dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/text_field_background"
-        android:text="Last Name"
+        android:hint="Last Name"
         android:textColor="@color/text_primary"
         android:fontFamily="@font/roboto_regular"
         android:elevation="2dp"
-        app:layout_constraintTop_toBottomOf="@id/tvDetailsFname"
+        app:layout_constraintTop_toBottomOf="@id/etDetailsFname"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Phone Number Field -->
-    <TextView
-        android:id="@+id/tvDetailsPhone"
+    <!-- Phone Number Field (Editable) -->
+    <EditText
+        android:id="@+id/etDetailsPhone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="12dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/text_field_background"
-        android:text="Phone Number"
+        android:hint="Phone Number"
         android:textColor="@color/text_primary"
         android:fontFamily="@font/roboto_regular"
         android:elevation="2dp"
-        app:layout_constraintTop_toBottomOf="@id/tvDetailsLname"
+        android:inputType="phone"
+        android:maxLength="10"
+        app:layout_constraintTop_toBottomOf="@id/etDetailsLname"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Year of Birth Field -->
-    <TextView
+
+    <!-- Year of Birth Field (non-editable) -->
+    <EditText
         android:id="@+id/tvDetailsYOB"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -112,7 +116,23 @@
         android:textColor="@color/text_primary"
         android:fontFamily="@font/roboto_regular"
         android:elevation="2dp"
-        app:layout_constraintTop_toBottomOf="@id/tvDetailsPhone"
+        android:focusable="false"
+        app:layout_constraintTop_toBottomOf="@id/etDetailsPhone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Save Changes Button -->
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Save Changes"
+        android:backgroundTint="@color/button_primary"
+        android:textColor="@color/white"
+        android:fontFamily="@font/roboto_medium"
+        android:elevation="4dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvDetailsYOB"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -126,12 +146,11 @@
         android:textColor="@color/white"
         android:fontFamily="@font/roboto_medium"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:elevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/tvDetailsYOB"
+        app:layout_constraintTop_toBottomOf="@id/btnSave"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnLogout"/>
+        app:layout_constraintEnd_toStartOf="@id/btnLogout" />
 
     <!-- Logout Button -->
     <Button
@@ -142,10 +161,9 @@
         android:backgroundTint="@color/button_primary"
         android:textColor="@color/white"
         android:fontFamily="@font/roboto_medium"
-        android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:elevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/tvDetailsYOB"
+        app:layout_constraintTop_toBottomOf="@id/btnSave"
         app:layout_constraintStart_toEndOf="@id/btnBack"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -157,12 +175,12 @@
         android:text="Forgot Password?"
         android:textColor="@color/link_color"
         android:textSize="16sp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp"
         app:layout_constraintTop_toBottomOf="@id/btnBack"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Delete Account Button -->
     <Button
@@ -173,7 +191,7 @@
         android:backgroundTint="@color/error_color"
         android:textColor="@color/white"
         android:fontFamily="@font/roboto_medium"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
         android:elevation="4dp"
         app:layout_constraintTop_toBottomOf="@id/btnForgotPassword"
         app:layout_constraintStart_toStartOf="parent"

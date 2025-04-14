@@ -7,15 +7,15 @@
 
     <item
         android:id="@+id/menu_userdetails"
-        android:title="User Details" />
+        android:title="Settings" />
 
     <item
         android:id="@+id/menu_ChatBot"
-        android:title="AI" />
+        android:title="Chat Bot" />
 
     <item
         android:id="@+id/menu_timer"
-        android:title="Timer" />
+        android:title="Running" />
 
     <item
         android:id="@+id/menu_logout"

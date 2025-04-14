@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat;
 
 /**
  * NotificationReceiver handles the creation and display of daily message notifications.
- * It builds an interactive notification with a snooze action and reschedules the notification for the next day.
+ * It builds a simple notification and reschedules it for the next day.
  */
 public class NotificationReceiver extends BroadcastReceiver {
 
@@ -20,7 +20,11 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     /**
      * Called when the BroadcastReceiver receives an Intent broadcast.
-     * Builds and displays the notification with interactive snooze functionality, and reschedules it for the next day.
+     * <p>
+     * This method extracts the message and scheduled time data from the received Intent,
+     * builds and displays the notification without any snooze action, and then reschedules
+     * the notification for the next day.
+     * </p>
      *
      * @param context The Context in which the receiver is running.
      * @param intent  The received Intent containing notification data.
@@ -30,25 +34,11 @@ public class NotificationReceiver extends BroadcastReceiver {
         // Extract the message text from the intent.
         String message = intent.getStringExtra("message");
 
-        // Create an intent for the snooze action.
-        Intent snoozeIntent = new Intent(context, NotificationActionReceiver.class);
-        snoozeIntent.setAction("SNOOZE_ACTION");
-        snoozeIntent.putExtra("message", message);
-
-        // Wrap the snooze intent in a PendingIntent for broadcast.
-        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(
-                context,
-                0,
-                snoozeIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
-
-        // Build the interactive notification with a snooze action button.
+        // Build the simple notification.
         Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.my_logo)
                 .setContentTitle("Daily Message")
                 .setContentText(message)
-                .addAction(R.drawable.ic_snooze, "Snooze", snoozePendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .build();
