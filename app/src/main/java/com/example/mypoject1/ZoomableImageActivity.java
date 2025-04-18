@@ -2,6 +2,8 @@ package com.example.mypoject1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,6 +57,23 @@ public class ZoomableImageActivity extends AppCompatActivity {
     }
 
     /**
+     * onCreateOptionsMenu
+     * <p>
+     * Inflates the options menu from the XML resource file, adding menu items to the toolbar.
+     * </p>
+     *
+     * @param menu The menu to populate with items.
+     * @return true if the menu was successfully created.
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Obtain a MenuInflater and inflate the menu resource into the provided menu.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    /**
      * Handles selection of options menu items.
      * <p>
      * Depending on the selected menu item, this method creates an Intent to navigate to a different activity.
@@ -76,9 +95,9 @@ public class ZoomableImageActivity extends AppCompatActivity {
             // Finish this activity if the user logs out.
             finish();
         } else if (item.getItemId() == R.id.menu_timer) {
-            intent = new Intent(this, TimerActivity.class);
+            intent = new Intent(this, RunningActivity.class);
         } else if (item.getItemId() == R.id.menu_userdetails) {
-            intent = new Intent(this, UserDetailsActivity.class);
+            intent = new Intent(this, SettingsActivity.class);
         } else if (item.getItemId() == R.id.menu_ForgotPassword) {
             intent = new Intent(this, ForgotPasswordActivity.class);
         } else if(item.getItemId() == R.id.menu_ChatBot){

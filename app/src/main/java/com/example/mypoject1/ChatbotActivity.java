@@ -515,9 +515,9 @@ public class ChatbotActivity extends AppCompatActivity {
             // Call logout method to clear shared preferences and sign out
             logout();
         } else if (item.getItemId() == R.id.menu_timer) {
-            intent = new Intent(this, TimerActivity.class);
+            intent = new Intent(this, RunningActivity.class);
         } else if (item.getItemId() == R.id.menu_userdetails) {
-            intent = new Intent(this, UserDetailsActivity.class);
+            intent = new Intent(this, SettingsActivity.class);
         } else if (item.getItemId() == R.id.menu_ChatBot) {
             intent = new Intent(this, ChatbotActivity.class);
         }

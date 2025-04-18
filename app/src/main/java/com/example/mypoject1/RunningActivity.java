@@ -44,14 +44,12 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 // API usage: Firebase Firestore API is imported to store and retrieve workout summary data remotely.
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.location.LocationServices;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -82,7 +80,7 @@ import java.util.Locale;
  * </ul>
  * </p>
  */
-public class TimerActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, OnMapReadyCallback {
+public class RunningActivity extends AppCompatActivity implements View.OnClickListener, SensorEventListener, OnMapReadyCallback {
 
     // Logging tag for debug messages
     private static final String TAG = "TimerActivity";
@@ -677,7 +675,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
                     isTimerRunning = false;
                     updateCountText(0);
                     btnStartTimer.setText("Start");
-                    Toast.makeText(TimerActivity.this, "Time's up! Great job!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RunningActivity.this, "Time's up! Great job!", Toast.LENGTH_LONG).show();
                     stopCounters();
                 }
             }
@@ -767,7 +765,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         // Check which button was clicked and perform the corresponding action
         if (view == btnBack) {
             // Navigate back to HomeActivity
-            Intent intent = new Intent(TimerActivity.this, HomeActivity.class);
+            Intent intent = new Intent(RunningActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         } else if (view == btnStartStopwatch) {
@@ -1008,9 +1006,9 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         } else if (item.getItemId() == R.id.menu_logout) {
             logout();
         } else if (item.getItemId() == R.id.menu_timer) {
-            intent = new Intent(this, TimerActivity.class);
+            intent = new Intent(this, RunningActivity.class);
         } else if (item.getItemId() == R.id.menu_userdetails) {
-            intent = new Intent(this, UserDetailsActivity.class);
+            intent = new Intent(this, SettingsActivity.class);
         } else if (item.getItemId() == R.id.menu_ChatBot) {
             intent = new Intent(this, ChatbotActivity.class);
         }
@@ -1038,7 +1036,7 @@ public class TimerActivity extends AppCompatActivity implements View.OnClickList
         FirebaseAuth.getInstance().signOut();
 
         // Redirect to the login activity and finish this activity
-        Intent intent = new Intent(TimerActivity.this, MainActivity.class);
+        Intent intent = new Intent(RunningActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

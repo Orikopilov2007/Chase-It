@@ -28,9 +28,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/my_logo"
         android:label="Chase It"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/my_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyPoject1"
         tools:targetApi="34">
@@ -61,10 +61,10 @@
             android:value="AIzaSyD9k7v6YmZ0UGbhagYRwR-npY0kzpwn6hU"/>
 
 
-        <activity android:name=".TimerActivity" android:exported="false" />
+        <activity android:name=".RunningActivity" android:exported="false" />
         <activity android:name=".CameraActivity" android:exported="false" />
         <activity android:name=".HomeActivity" android:exported="false" />
-        <activity android:name=".UserDetailsActivity" android:exported="false" />
+        <activity android:name=".SettingsActivity" android:exported="false" />
         <activity android:name=".LoginActivity" android:exported="false" />
         <activity android:name=".SignupActivity" android:exported="false" />
         <activity android:name=".ForgotPasswordActivity" android:exported="false" />

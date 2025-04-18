@@ -42,7 +42,7 @@ import android.widget.BaseAdapter;
  * UserDetailsActivity displays the user's details, allows editing of specific fields,
  * and supports updating the profile picture and other details in Firebase.
  */
-public class UserDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     // UI Elements for displaying and editing user details.
     private EditText etDetailsFirstName, etDetailsLastName, etDetailsPhone, etDetailsYOB;
@@ -232,7 +232,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
      * </p>
      */
     private void confirmAndDeleteAccount() {
-        new AlertDialog.Builder(UserDetailsActivity.this)
+        new AlertDialog.Builder(SettingsActivity.this)
                 .setTitle("Delete Account")
                 .setMessage("Are you sure you want to delete your account? This action cannot be undone.")
                 .setPositiveButton("Yes", (dialog, which) -> {
@@ -254,16 +254,16 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                                                     .edit()
                                                     .clear()
                                                     .apply();
-                                            Toast.makeText(UserDetailsActivity.this, "Account deleted successfully", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(SettingsActivity.this, "Account deleted successfully", Toast.LENGTH_SHORT).show();
                                             // Navigate to MainActivity.
-                                            startActivity(new Intent(UserDetailsActivity.this, MainActivity.class));
+                                            startActivity(new Intent(SettingsActivity.this, MainActivity.class));
                                             finish();
                                         })
                                         .addOnFailureListener(e ->
-                                                Toast.makeText(UserDetailsActivity.this, "Failed to delete account data from DB: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                                Toast.makeText(SettingsActivity.this, "Failed to delete account data from DB: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                             })
                             .addOnFailureListener(e ->
-                                    Toast.makeText(UserDetailsActivity.this, "Failed to delete account: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                    Toast.makeText(SettingsActivity.this, "Failed to delete account: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                 })
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .setCancelable(false)
@@ -351,13 +351,13 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                     editor.putInt("yob", Integer.parseInt(updatedYob));
                     editor.apply();
 
-                    Toast.makeText(UserDetailsActivity.this, "Details updated successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingsActivity.this, "Details updated successfully", Toast.LENGTH_SHORT).show();
                     // Reload the user details to reflect the updates.
                     loadDetails();
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Failed to update user details: " + e.getMessage());
-                    Toast.makeText(UserDetailsActivity.this, "Failed to update details", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingsActivity.this, "Failed to update details", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -427,10 +427,10 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                 .addOnSuccessListener(aVoid -> {
                     profileImageUri = null;
                     ivProfilePhoto.setImageResource(R.drawable.default_user_photo);
-                    Toast.makeText(UserDetailsActivity.this, "Profile picture deleted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingsActivity.this, "Profile picture deleted", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(UserDetailsActivity.this, "Failed to delete profile picture", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingsActivity.this, "Failed to delete profile picture", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -458,11 +458,11 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         storageRef.listAll().addOnSuccessListener(listResult -> {
             List<StorageReference> items = listResult.getItems();
             if (items.isEmpty()) {
-                Toast.makeText(UserDetailsActivity.this, "No images available in App Gallery", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingsActivity.this, "No images available in App Gallery", Toast.LENGTH_SHORT).show();
                 return;
             }
             // Create and configure a custom dialog to display images.
-            Dialog dialog = new Dialog(UserDetailsActivity.this);
+            Dialog dialog = new Dialog(SettingsActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_firebase_gallery);
 
@@ -480,7 +480,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
             });
             dialog.show();
         }).addOnFailureListener(e ->
-                Toast.makeText(UserDetailsActivity.this, "Failed to load images from Storage", Toast.LENGTH_SHORT).show());
+                Toast.makeText(SettingsActivity.this, "Failed to load images from Storage", Toast.LENGTH_SHORT).show());
     }
 
     /**
@@ -628,21 +628,21 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
                                 .update("profileImageUri", uri.toString())
                                 .addOnSuccessListener(aVoid -> {
                                     Log.d(TAG, "Profile picture updated in Firestore");
-                                    Toast.makeText(UserDetailsActivity.this, "Profile picture updated", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SettingsActivity.this, "Profile picture updated", Toast.LENGTH_SHORT).show();
                                     loadDetails();
                                 })
                                 .addOnFailureListener(e -> {
                                     Log.e(TAG, "Failed to update profile picture in Firestore: " + e.getMessage());
-                                    Toast.makeText(UserDetailsActivity.this, "Failed to update profile picture", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SettingsActivity.this, "Failed to update profile picture", Toast.LENGTH_SHORT).show();
                                 });
                     }).addOnFailureListener(e -> {
                         Log.e(TAG, "Failed to get download URL: " + e.getMessage());
-                        Toast.makeText(UserDetailsActivity.this, "Failed to retrieve image URL", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SettingsActivity.this, "Failed to retrieve image URL", Toast.LENGTH_SHORT).show();
                     });
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Failed to upload profile picture: " + e.getMessage());
-                    Toast.makeText(UserDetailsActivity.this, "Failed to upload profile picture", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingsActivity.this, "Failed to upload profile picture", Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -680,9 +680,9 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         } else if (item.getItemId() == R.id.menu_logout) {
             logout();
         } else if (item.getItemId() == R.id.menu_timer) {
-            intent = new Intent(this, TimerActivity.class);
+            intent = new Intent(this, RunningActivity.class);
         } else if (item.getItemId() == R.id.menu_userdetails) {
-            intent = new Intent(this, UserDetailsActivity.class);
+            intent = new Intent(this, SettingsActivity.class);
         } else if(item.getItemId() == R.id.menu_ChatBot){
             intent = new Intent(this, ChatbotActivity.class);
         }
@@ -720,7 +720,7 @@ public class UserDetailsActivity extends AppCompatActivity implements View.OnCli
         FirebaseAuth.getInstance().signOut();
 
         // Redirect to the MainActivity (login screen).
-        Intent intent = new Intent(UserDetailsActivity.this, MainActivity.class);
+        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

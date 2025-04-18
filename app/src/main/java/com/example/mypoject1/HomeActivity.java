@@ -120,13 +120,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 // Check which button was clicked using view references.
                 if (view == binding.btnHomeUserDetails) {
                     // Navigate to UserDetailsActivity if the "User Details" button was clicked.
-                    intent = new Intent(HomeActivity.this, UserDetailsActivity.class);
+                    intent = new Intent(HomeActivity.this, SettingsActivity.class);
                 } else if (view == binding.btnAI) {
                     // Navigate to ChatbotActivity if the "AI" button was clicked.
                     intent = new Intent(HomeActivity.this, ChatbotActivity.class);
                 } else if (view == binding.btnTimer) {
                     // Navigate to TimerActivity if the "Timer" button was clicked.
-                    intent = new Intent(HomeActivity.this, TimerActivity.class);
+                    intent = new Intent(HomeActivity.this, RunningActivity.class);
                 } else if (view == binding.btnLogout) {
                     // Call the logout() method to clear user data and sign out, then return to avoid navigation.
                     logout();
@@ -227,10 +227,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         } else if (item.getItemId() == R.id.menu_timer) {
             // Navigate to TimerActivity.
-            intent = new Intent(this, TimerActivity.class);
+            intent = new Intent(this, RunningActivity.class);
         } else if (item.getItemId() == R.id.menu_userdetails) {
             // Navigate to UserDetailsActivity.
-            intent = new Intent(this, UserDetailsActivity.class);
+            intent = new Intent(this, SettingsActivity.class);
         } else if (item.getItemId() == R.id.menu_ChatBot) {
             // Navigate to ChatbotActivity.
             intent = new Intent(this, ChatbotActivity.class);

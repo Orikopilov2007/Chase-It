@@ -25,7 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:boxBackgroundColor="@color/background_light"
-        app:hintTextAppearance="@style/HintTextAppearance">
+        app:hintTextAppearance="@style/HintTextAppearance"
+        app:errorTextAppearance="@style/MyErrorTextStyle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etLoginEmail"
@@ -35,17 +36,23 @@
             android:hint="Your email"
             android:textColor="@color/background_color"
             android:padding="16dp"
+            android:paddingEnd="36dp"
+            app:errorTextAppearance="@style/MyErrorTextStyle"
             android:contentDescription="Email Input Field" />
     </com.google.android.material.textfield.TextInputLayout>
+>
+
 
     <!-- Password Input -->
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         app:boxBackgroundColor="@color/background_light"
         app:hintTextAppearance="@style/HintTextAppearance"
-        app:endIconMode="password_toggle">
+        app:endIconMode="password_toggle"
+        app:errorTextAppearance="@style/MyErrorTextStyle">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etLoginPassword"
@@ -55,8 +62,12 @@
             android:hint="Your password"
             android:textColor="@color/background_color"
             android:padding="16dp"
+            android:paddingEnd="36dp"
+            app:errorTextAppearance="@style/MyErrorTextStyle"
             android:contentDescription="Password Input Field" />
     </com.google.android.material.textfield.TextInputLayout>
+
+
 
 
     <!-- Forgot Password Button -->
