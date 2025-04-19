@@ -137,7 +137,7 @@ public class RunningActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: Starting TimerActivity");
         // Set the layout for this activity
-        setContentView(R.layout.activity_timer);
+        setContentView(R.layout.activity_running);
 
         // Initialize Firebase Firestore for storing workout data
         db = FirebaseFirestore.getInstance();

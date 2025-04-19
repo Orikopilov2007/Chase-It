@@ -27,7 +27,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.yalantis.ucrop.UCrop;
@@ -73,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Set the layout for the activity.
-        setContentView(R.layout.activity_user_details);
+        setContentView(R.layout.activity_settings);
 
         // Find and initialize UI elements.
         findViews();
