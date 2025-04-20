@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.mypoject1.databinding.ActivityHomeBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -89,6 +91,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         binding.btnAI.setOnClickListener(this);
         binding.btnTimer.setOnClickListener(this);
         binding.btnLogout.setOnClickListener(this);
+
+        //making sure that pressing on this button does nothing in this page
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+            }
+        });
     }
 
     /**
@@ -241,4 +250,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //making sure that pressing on this button does nothing in this page
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+
 }

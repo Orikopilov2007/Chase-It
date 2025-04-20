@@ -30,7 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.yalantis.ucrop.UCrop;
-import java.io.File;
+
 import java.util.List;
 import java.util.UUID;
 import android.app.Dialog;
@@ -452,35 +452,45 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
      * </p>
      */
     private void showFirebaseGalleryDialog() {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("profile_pictures");
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("profile_pictures");
         storageRef.listAll().addOnSuccessListener(listResult -> {
             List<StorageReference> items = listResult.getItems();
-            if (items.isEmpty()) {
-                Toast.makeText(SettingsActivity.this, "No images available in App Gallery", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            // Create and configure a custom dialog to display images.
-            Dialog dialog = new Dialog(SettingsActivity.this);
+            Dialog dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_firebase_gallery);
-
             GridView gridView = dialog.findViewById(R.id.gridViewGallery);
             GalleryAdapter adapter = new GalleryAdapter(this, items);
             gridView.setAdapter(adapter);
-
-            // Set an item click listener to allow image selection and cropping.
             gridView.setOnItemClickListener((parent, view, position, id) -> {
                 StorageReference selectedRef = items.get(position);
                 selectedRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     dialog.dismiss();
-                    startCrop(uri);
+                    profileImageUri = uri;
+                    Glide.with(this)
+                            .load(uri)
+                            .transform(new CircleCrop())
+                            .into(ivProfilePhoto);
+                    updateProfileImageUriInFirestore(uri.toString());
                 });
             });
             dialog.show();
-        }).addOnFailureListener(e ->
-                Toast.makeText(SettingsActivity.this, "Failed to load images from Storage", Toast.LENGTH_SHORT).show());
+        });
     }
+
+    private void updateProfileImageUriInFirestore(String uriString) {
+        String uid = FirebaseAuth.getInstance().getUid();
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(uid)
+                .update("profileImageUri", uriString)
+                .addOnSuccessListener(aVoid ->
+                        Toast.makeText(this, "Profile picture updated", Toast.LENGTH_SHORT).show()
+                )
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Failed to update profile picture", Toast.LENGTH_SHORT).show()
+                );
+    }
+
 
     /**
      * Adapter class for displaying image thumbnails in the Firebase Gallery dialog.
@@ -550,25 +560,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * Starts the cropping activity for the selected image using UCrop.
-     * <p>
-     * The method defines a destination URI in the cache directory and starts UCrop
-     * with a fixed aspect ratio (1:1) and a maximum result size.
-     * </p>
-     *
-     * @param sourceUri The URI of the image to be cropped.
-     */
-    private void startCrop(Uri sourceUri) {
-        Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "cropped_" + UUID.randomUUID().toString() + ".jpg"));
-        UCrop.Options options = new UCrop.Options();
-        UCrop.of(sourceUri, destinationUri)
-                .withAspectRatio(1, 1)
-                .withMaxResultSize(500, 500)
-                .withOptions(options)
-                .start(this);
-    }
-
-    /**
      * Handles the results from activities such as Camera, Gallery, and UCrop.
      * <p>
      * Depending on the request code, this method starts the crop activity for new images
@@ -582,18 +573,25 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            // If the result comes from the Camera or Gallery, start the crop activity.
-            if (requestCode == CAMERA_REQUEST_CODE || requestCode == GALLERY_REQUEST_CODE) {
-                Uri imageUri = data.getData();
-                startCrop(imageUri);
-            } else if (requestCode == UCROP_REQUEST_CODE) {
-                // If the result is from UCrop, update the profile photo.
-                final Uri croppedUri = UCrop.getOutput(data);
-                if (croppedUri != null) {
-                    ivProfilePhoto.setImageURI(croppedUri);
-                    uploadProfileImage(croppedUri);
-                }
+
+        if (requestCode == CAMERA_REQUEST_CODE
+                && resultCode == RESULT_OK
+                && data != null) {
+
+            String uriString = data.getStringExtra(CameraActivity.EXTRA_IMAGE_URI);
+            if (uriString != null) {
+                Uri newUri = Uri.parse(uriString);
+
+                // Glide + CircleCrop
+                Glide.with(this)
+                        .load(newUri)
+                        .transform(new CircleCrop())
+                        .into(ivProfilePhoto);
+
+                uploadProfileImage(newUri);
+
+            } else {
+                Toast.makeText(this, "Failed to retrieve image", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -607,43 +605,34 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
      *
      * @param imageUri The URI of the image to be uploaded.
      */
-    public void uploadProfileImage(Uri imageUri) {
-        FirebaseAuth fbAuth = FirebaseAuth.getInstance();
-        String uid = fbAuth.getUid();
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
-        StorageReference imageRef = storageRef.child("profile_pictures/" + UUID.randomUUID().toString());
+    private void uploadProfileImage(Uri imageUri) {
+        String uid = FirebaseAuth.getInstance().getUid();
+        StorageReference ref = FirebaseStorage.getInstance()
+                .getReference("profile_pictures/" + uid + "_" + UUID.randomUUID() + ".jpg");
 
-        Log.d(TAG, "Uploading image URI: " + imageUri.toString());
-        // Upload the file to Firebase Storage.
-        imageRef.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    // Retrieve the download URL for the uploaded image.
-                    imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        profileImageUri = uri;
-                        // Update the user's document in Firestore with the new image URL.
-                        FirebaseFirestore.getInstance().collection("users")
-                                .document(uid)
-                                .update("profileImageUri", uri.toString())
-                                .addOnSuccessListener(aVoid -> {
-                                    Log.d(TAG, "Profile picture updated in Firestore");
-                                    Toast.makeText(SettingsActivity.this, "Profile picture updated", Toast.LENGTH_SHORT).show();
-                                    loadDetails();
-                                })
-                                .addOnFailureListener(e -> {
-                                    Log.e(TAG, "Failed to update profile picture in Firestore: " + e.getMessage());
-                                    Toast.makeText(SettingsActivity.this, "Failed to update profile picture", Toast.LENGTH_SHORT).show();
-                                });
-                    }).addOnFailureListener(e -> {
-                        Log.e(TAG, "Failed to get download URL: " + e.getMessage());
-                        Toast.makeText(SettingsActivity.this, "Failed to retrieve image URL", Toast.LENGTH_SHORT).show();
-                    });
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Failed to upload profile picture: " + e.getMessage());
-                    Toast.makeText(SettingsActivity.this, "Failed to upload profile picture", Toast.LENGTH_SHORT).show();
-                });
+        ref.putFile(imageUri)
+                .addOnSuccessListener(task -> ref.getDownloadUrl()
+                        .addOnSuccessListener(downloadUri -> {
+                            // update Firestore
+                            FirebaseFirestore.getInstance()
+                                    .collection("users")
+                                    .document(uid)
+                                    .update("profileImageUri", downloadUri.toString())
+                                    .addOnSuccessListener(a -> {
+                                        profileImageUri = downloadUri;
+                                        Toast.makeText(this, "Profile picture updated", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(e ->
+                                            Toast.makeText(this, "Firestore update failed: " + e.getMessage(),
+                                                    Toast.LENGTH_SHORT).show()
+                                    );
+                        })
+                )
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
     }
+
 
     /**
      * Inflates the options menu.

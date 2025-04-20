@@ -40,10 +40,10 @@ public class MyService extends Service {
 
         // Schedule the daily notifications with exact timing.
         // Schedules a "Good Morning" notification at 8:00 AM.
-        scheduleExactMessage(this, 8, 0, "Good Morning! Have a great day! ☀️");
+        scheduleExactMessage(this, 8, 0, "Good Morning! Have a great running!");
 
         // Schedules a "Good Night" notification at 10:00 PM.
-        scheduleExactMessage(this, 22, 0, "Good Night! Sleep well! 🌙");
+        scheduleExactMessage(this, 22, 0, "Good Night!");
     }
 
     /**

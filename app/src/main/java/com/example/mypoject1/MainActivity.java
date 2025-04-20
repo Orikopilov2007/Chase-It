@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -75,6 +77,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnMainSignUp.startAnimation(slideIn);
         btnMainLogIn.startAnimation(slideIn);
+
+        //making sure that pressing on this button does nothing in this page
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+            }
+        });
     }
 
     /**
@@ -162,5 +171,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(this, ForgotPasswordActivity.class));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //making sure that pressing on this button does nothing in this page
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

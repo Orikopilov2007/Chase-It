@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -73,6 +74,13 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         // Apply slide in animation to the key buttons
         btnResetPassword.startAnimation(slideIn);
         btnBack.startAnimation(slideIn);
+
+        //making sure that pressing on this button does nothing in this page
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+            }
+        });
     }
 
     /**
@@ -299,5 +307,11 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //making sure that pressing on this button does nothing in this page
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
