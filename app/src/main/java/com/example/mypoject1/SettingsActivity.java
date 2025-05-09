@@ -411,26 +411,38 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * Deletes the current profile photo.
+     * Deletes the current profile photo from Firebase Storage and Firestore.
      * <p>
-     * This method clears the profile image URL in Firestore and resets the UI to show
-     * the default user photo.
+     * This method removes the image file from Storage, clears the URI in Firestore,
+     * and resets the UI to show the default user photo.
      * </p>
      */
     private void deleteCurrentPhoto() {
-        FirebaseAuth fbAuth = FirebaseAuth.getInstance();
-        String uid = fbAuth.getUid();
-        FirebaseFirestore.getInstance().collection("users")
-                .document(uid)
-                .update("profileImageUri", "")
-                .addOnSuccessListener(aVoid -> {
-                    profileImageUri = null;
-                    ivProfilePhoto.setImageResource(R.drawable.default_user_photo);
-                    Toast.makeText(SettingsActivity.this, "Profile picture deleted", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(SettingsActivity.this, "Failed to delete profile picture", Toast.LENGTH_SHORT).show();
-                });
+        if (profileImageUri != null) {
+            // Delete from Firebase Storage
+            StorageReference photoRef = FirebaseStorage.getInstance().getReferenceFromUrl(profileImageUri.toString());
+            photoRef.delete()
+                    .addOnSuccessListener(aVoid -> {
+                        // After deleting the file, clear the Firestore entry
+                        String uid = FirebaseAuth.getInstance().getUid();
+                        FirebaseFirestore.getInstance().collection("users")
+                                .document(uid)
+                                .update("profileImageUri", "")
+                                .addOnSuccessListener(aVoid1 -> {
+                                    profileImageUri = null;
+                                    ivProfilePhoto.setImageResource(R.drawable.default_user_photo);
+                                    Toast.makeText(SettingsActivity.this, "Profile picture deleted", Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(SettingsActivity.this, "Failed to clear profile picture URL: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(SettingsActivity.this, "Failed to delete image file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(this, "No profile picture to delete", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
