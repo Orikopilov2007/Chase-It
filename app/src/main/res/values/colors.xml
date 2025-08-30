@@ -1,0 +1,66 @@
+<resources>
+    <!-- General Colors -->
+    <color name="black">#212121</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gray">#616161</color>
+    <color name="background_color">#1C1C1C</color>
+    <color name="light_gray">#BDBDBD</color>
+    <color name="dark_gray">#757575</color>
+    <color name="light_black">#2C2C2C</color>
+
+    <!-- Gradient Colors -->
+    <color name="background_gradient_start">#2A3E53</color>
+    <color name="background_gradient_end">#34495E</color>
+    <color name="background_gradient">#2A3E53</color>
+    <color name="background_gradient_light">#5D6D7E</color>
+
+    <!-- Darker Gradient Colors -->
+    <color name="background_gradient_start_dark">#2A3E53</color>
+    <color name="background_gradient_end_dark">#34495E</color>
+    <color name="background_gradient_mid_dark">#2C3E50</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#ECECEC</color>
+    <color name="text_highlight">#FF5722</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_on_secondary">#424242</color>
+    <color name="text_secondary">#9E9E9E</color>
+    <color name="text_disabled">#B0B0B0</color>
+
+    <!-- Button Colors -->
+    <color name="button_primary">#FF5722</color>
+    <color name="button_accent">#4CAF50</color>
+    <color name="button_secondary">#616161</color>
+    <color name="button_primary_pressed">#FF4500</color>
+    <color name="button_accent_pressed">#388E3C</color>
+
+    <!-- Link and Action Colors -->
+    <color name="link_color">#1E88E5</color>
+    <color name="action_color">#0288D1</color>
+
+    <!-- Success, Warning, and Error Colors -->
+    <color name="success_color">#4CAF50</color>
+    <color name="warning_color">#FF9800</color>
+    <color name="error_color">#F44336</color>
+
+    <!-- Background Colors -->
+    <color name="background_light">#F5F5F5</color>
+    <color name="background_dark">#212121</color>
+
+    <!-- Card & Elevation Shadows -->
+    <color name="card_background">#FFFFFF</color>
+    <color name="shadow_color">#000000</color>
+
+    <!-- Border and Divider Colors -->
+    <color name="border_color">#E0E0E0</color>
+    <color name="divider_color">#BDBDBD</color>
+
+    <!-- Status Bar Colors -->
+    <color name="status_bar_color">#2A3E53</color>
+
+    <!-- Special Use Colors -->
+    <color name="highlight_background">#FFEB3B</color>
+    <color name="button_text">#FFFFFF</color>
+    <color name="grey">#B0B0B0</color>
+
+</resources>

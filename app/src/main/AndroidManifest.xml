@@ -1,0 +1,76 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.BODY_SENSORS"/>
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
+
+
+    <!-- Permissions for Android 13 and above -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" android:required="true" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" android:required="false" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" android:required="false" />
+
+
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/my_logo"
+        android:label="Chase It"
+        android:roundIcon="@drawable/my_logo"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyPoject1"
+        tools:targetApi="34">
+
+        <activity android:name=".SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+        <activity
+            android:name=".ZoomableImageActivity"
+            android:exported="false" />
+
+
+
+        <receiver android:name=".NotificationReceiver" android:exported="true"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD9k7v6YmZ0UGbhagYRwR-npY0kzpwn6hU"/>
+
+
+        <activity android:name=".RunningActivity" android:exported="false" />
+        <activity android:name=".CameraActivity" android:exported="false" />
+        <activity android:name=".HomeActivity" android:exported="false" />
+        <activity android:name=".SettingsActivity" android:exported="false" />
+        <activity android:name=".LoginActivity" android:exported="false" />
+        <activity android:name=".SignupActivity" android:exported="false" />
+        <activity android:name=".ForgotPasswordActivity" android:exported="false" />
+        <activity android:name=".MainActivity" android:exported="true" />
+        <service android:name=".MyService" android:exported="false" />
+        <activity android:name=".ChatbotActivity" android:exported="false" />
+
+    </application>
+</manifest>

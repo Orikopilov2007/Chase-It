@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="btnHomeUserDetails" type="id" />
+    <item name="btnProgressPhoto" type="id" />
+    <item name="btnTimer" type="id" />
+    <item name="btnLogout" type="id" />
+    <item name="ivCapturedPhoto" type="id" />
+    <item name="splash_logo" type="id" />
+    <item name="progress_bar" type="id" />
+</resources>

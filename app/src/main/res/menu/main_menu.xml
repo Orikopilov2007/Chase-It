@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_home"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/menu_userdetails"
+        android:title="Settings" />
+
+    <item
+        android:id="@+id/menu_ChatBot"
+        android:title="Chat Bot" />
+
+    <item
+        android:id="@+id/menu_timer"
+        android:title="Running" />
+
+    <item
+        android:id="@+id/menu_logout"
+        android:title="Log Out" />
+
+</menu>

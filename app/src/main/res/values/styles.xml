@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="HintTextAppearance"></style>
+
+    <style name="MyErrorTextStyle" parent="TextAppearance.Design.Error">
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingLeft">20dp</item>
+    </style>
+
+
+
+</resources>

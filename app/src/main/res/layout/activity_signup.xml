@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    android:background="@drawable/gradient_background"
+    android:scrollbars="vertical">
+
+    <!-- Title Text -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create your account"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="32sp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"/>
+
+    <!-- Input Fields -->
+    <EditText
+        android:id="@+id/etSignupEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:hint="Email"
+        android:background="@drawable/input_field_background"
+        android:padding="16dp"
+        android:paddingEnd="36dp"
+        android:textColor="@color/background_dark"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Password Input with Eye Toggle -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutSignupPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/input_field_background"
+        app:endIconMode="password_toggle">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSignupPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="Password"
+            android:padding="16dp"
+            android:paddingEnd="38dp"
+            android:textColor="@color/background_dark"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <EditText
+        android:id="@+id/etSignupFname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="First Name"
+        android:background="@drawable/input_field_background"
+        android:padding="16dp"
+        android:paddingEnd="36dp"
+        android:textColor="@color/background_dark"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etSignupLname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="Last Name"
+        android:background="@drawable/input_field_background"
+        android:padding="16dp"
+        android:paddingEnd="36dp"
+        android:textColor="@color/background_dark"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etSignupPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:hint="Phone Number"
+        android:background="@drawable/input_field_background"
+        android:padding="16dp"
+        android:paddingEnd="36dp"
+        android:textColor="@color/background_dark"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etSignupYOB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Year of Birth"
+        android:background="@drawable/input_field_background"
+        android:padding="16dp"
+        android:paddingEnd="36dp"
+        android:textColor="@color/background_dark"
+        android:textSize="16sp"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Sign-Up Button -->
+    <Button
+        android:id="@+id/btnSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        android:background="@drawable/button_background"
+        android:textSize="18sp"
+        android:textColor="@color/button_text"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Back Button -->
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:background="@drawable/button_background"
+        android:textSize="18sp"
+        android:textColor="@color/button_text"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="center"
+        android:onClick="onBackButtonClick"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

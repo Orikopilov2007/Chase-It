@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "287418858302",
+    "project_id": "pumphouse-812d4",
+    "storage_bucket": "pumphouse-812d4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287418858302:android:252117629cea4886898a6f",
+        "android_client_info": {
+          "package_name": "com.example.mypoject1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJofef5Zgl92ddxwoBa94OrHt0h-GZFtA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
